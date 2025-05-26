@@ -1,12 +1,13 @@
 package com.consigna.consigna.models;
 
+
 import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @Entity
-@Table(name = "Consignatario")
-public class Consignatario {
+@Table(name = "Usuario")
+public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,11 +17,11 @@ public class Consignatario {
     @Column(name = "nome", length = 50)
     private String nome;
 
-    @Column(name = "tipo", length = 20)
-    private String tipo;
+    @Column(name = "usuario", length = 20)
+    private String usuario;
 
-    @Column(name = "telefone", length = 14)
-    private String telefone;
+    @Column(name = "senha", length = 20)
+    private String senha;
 
     // Getters e Setters
 
@@ -41,31 +42,31 @@ public class Consignatario {
         this.nome = nome;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getUsuario() {
+        return usuario;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
-    public String getTelefone() {
-        return telefone;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Consignatario that = (Consignatario) o;
-        return Objects.equals(id, that.id) && Objects.equals(nome, that.nome) && Objects.equals(tipo, that.tipo) && Objects.equals(telefone, that.telefone);
+        Usuario usuario1 = (Usuario) o;
+        return Objects.equals(id, usuario1.id) && Objects.equals(nome, usuario1.nome) && Objects.equals(usuario, usuario1.usuario) && Objects.equals(senha, usuario1.senha);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nome, tipo, telefone);
+        return Objects.hash(id, nome, usuario, senha);
     }
 }
