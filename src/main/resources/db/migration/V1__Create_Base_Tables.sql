@@ -1,23 +1,23 @@
-CREATE TABLE Consignatario (
+CREATE TABLE IF NOT EXISTS Consignatario (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(50),
     tipo VARCHAR(20),
     telefone VARCHAR(14)
 );
 
-CREATE TABLE Categoria (
+CREATE TABLE IF NOT EXISTS Categoria (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(20)
 );
 
-CREATE TABLE Usuario (
+CREATE TABLE IF NOT EXISTS Usuario (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(50),
     usuario VARCHAR(20),
     senha VARCHAR(20)
 );
 
-CREATE TABLE Lote (
+CREATE TABLE IF NOT EXISTS Lote (
     id SERIAL PRIMARY KEY,
     data_entrada DATE,
     data_fechamento DATE,
@@ -29,7 +29,7 @@ CREATE TABLE Lote (
     CONSTRAINT FK_Lote_3 FOREIGN KEY (fk_Usuario_id) REFERENCES Usuario (id) ON DELETE RESTRICT
 );
 
-CREATE TABLE Peca (
+CREATE TABLE IF NOT EXISTS Peca (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(50),
     valor_solicitado DOUBLE PRECISION,
