@@ -3,13 +3,13 @@ RETURNS TRIGGER AS $$
 DECLARE
     pecas_invalidas INTEGER;
 BEGIN
-    -- Verifica se há peças com status diferente de 0
+    -- Verifica se há peças com status diferente de 0 (vendida)
     SELECT COUNT(*) INTO pecas_invalidas
     FROM Peca
     WHERE fk_Lote_id = OLD.id AND status != 0;
 
     IF pecas_invalidas > 0 THEN
-        RAISE EXCEPTION 'Não é permitido excluir o lote: contém peça(s) com status diferente de 0.';
+        RAISE EXCEPTION 'Não é permitido excluir o lote: contém peça(s) que não foram vendidas.';
     END IF;
 
     RETURN OLD;

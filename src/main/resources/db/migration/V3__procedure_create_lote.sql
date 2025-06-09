@@ -41,6 +41,7 @@ BEGIN
             status,
             palavras_chave,
             valor_de_venda,
+            quantidade,
             fk_Lote_id,
             fk_Categoria_id
         ) VALUES (
@@ -50,6 +51,7 @@ BEGIN
             (peca->>'status')::INTEGER,
             peca->>'palavras_chave',
             CASE WHEN peca ? 'valor_de_venda' THEN (peca->>'valor_de_venda')::NUMERIC ELSE NULL END,
+            (peca->>'quantidade')::INTEGER,
             novo_lote_id,
             (peca->>'fk_Categoria_id')::INTEGER
         );
