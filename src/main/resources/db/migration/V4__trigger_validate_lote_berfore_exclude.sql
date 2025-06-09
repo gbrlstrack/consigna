@@ -16,6 +16,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trigger_verificar_pecas_antes_delete_lote ON lote;
 CREATE TRIGGER trigger_verificar_pecas_antes_delete_lote
 BEFORE DELETE ON Lote
 FOR EACH ROW
