@@ -2,7 +2,9 @@ CREATE TABLE IF NOT EXISTS Consignatario (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(50) NOT NULL,
     tipo VARCHAR(20) NOT NULL,
-    telefone VARCHAR(14) NOT NULL
+    telefone VARCHAR(14) NOT NULL,
+    cpf VARCHAR(11),
+    cnpj VARCHAR(14)
 );
 
 CREATE TABLE IF NOT EXISTS Categoria (
@@ -19,7 +21,7 @@ CREATE TABLE IF NOT EXISTS Usuario (
 
 CREATE TABLE IF NOT EXISTS Lote (
     id SERIAL PRIMARY KEY,
-    data_entrada DATE,
+    data_entrada DATE DEFAULT CURRENT_DATE,
     data_fechamento DATE,
     status INTEGER,
     valor_total NUMERIC(10,2),
@@ -38,9 +40,20 @@ CREATE TABLE IF NOT EXISTS Peca (
     palavras_chave VARCHAR(50),
     valor_de_venda NUMERIC(10,2),
     data_alteracao_status DATE,
-    data_pagamento_consignatario DATE,
+    quantidade INTEGER NOT NULL DEFAULT 1,
     fk_Lote_id INTEGER,
     fk_Categoria_id INTEGER NOT NULL,
     CONSTRAINT FK_Peca_2 FOREIGN KEY (fk_Lote_id) REFERENCES Lote (id) ON DELETE RESTRICT,
     CONSTRAINT FK_Peca_3 FOREIGN KEY (fk_Categoria_id) REFERENCES Categoria (id) ON DELETE RESTRICT
+);
+
+CREATE TABLE IF NOT EXISTS Saida (
+    id SERIAL PRIMARY KEY,
+    data_saida DATE NOT NULL DEFAULT CURRENT_DATE,
+    tipo VARCHAR(10),
+    quantidade INTEGER NOT NULL CHECK (quantidade > 0),
+    fk_Peca_id INTEGER NOT NULL,
+    fk_Usuario_id INTEGER NOT NULL,
+    CONSTRAINT FK_Saida_2 FOREIGN KEY (fk_Peca_id) REFERENCES Peca (id) ON DELETE CASCADE,
+    CONSTRAINT FK_Saida_3 FOREIGN KEY (fk_Usuario_id) REFERENCES Usuario (id) ON DELETE CASCADE
 );
