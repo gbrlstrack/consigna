@@ -1,45 +1,38 @@
 package com.consigna.consigna.services;
 
-import com.consigna.consigna.dtos.LoteRequest;
-import com.consigna.consigna.dtos.LoteResponse;
+import com.consigna.consigna.dtos.LoteDTO;
+import com.consigna.consigna.models.Lote;
 import com.consigna.consigna.repository.LoteRepository;
 import com.consigna.consigna.repository.PecaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.consigna.consigna.exceptions.ResourceNotFoundException;
+
+import static com.consigna.consigna.mapper.ObjectMapper.parseObjectsList;
+import static com.consigna.consigna.mapper.ObjectMapper.parseObject;
+
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class LoteService {
-//
-//    private final LoteRepository loteRepository;
-//    private final PecaRepository pecaRepository; // para buscar peças depois
-//
-//    public LoteResponse criarLoteComPecas(LoteRequest request) {
-//        Long loteId = loteRepository.inserirLoteComProcedure(request.getCodigo(), request.getDescricao());
-//
-//        LoteResponse response = new LoteResponse();
-//        response.setId(loteId);
-//        response.setCodigo(request.getCodigo());
-//        response.setDescricao(request.getDescricao());
-//        response.setPecas(pecaRepository.listarPecasPorLote(loteId));
-//
-//        return response;
-//    }
-//
-//    public LoteResponse buscarLotePorId(Long id) {
-//        // Aqui você buscaria os dados do Lote + peças
-//        LoteResponse response = loteRepository.buscarLoteResponsePorId(id);
-//        response.setPecas(pecaRepository.listarPecasPorLote(id));
-//        return response;
-//    }
-//
-//    public List<LoteResponse> listarLotes() {
-//        List<LoteResponse> lotes = loteRepository.listarLotes();
-//        for (LoteResponse lote : lotes) {
-//            lote.setPecas(pecaRepository.listarPecasPorLote(lote.getId()));
-//        }
-//        return lotes;
-//    }
+
+    @Autowired
+    LoteRepository loteRepository;
+    private final PecaRepository pecaRepository; // para buscar peças depois
+
+    public LoteDTO createLoteWithPecas(LoteDTO lote) {
+        var entity = parseObject(lote, Lote.class);
+        return parseObject(loteRepository.save(entity), LoteDTO.class);
+    }
+
+    public LoteDTO getById(Long id) {
+        var lote = loteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lote not found"));
+        return parseObject(lote, LoteDTO.class);
+    }
+
+    public List<LoteDTO> getAll() {
+        return parseObjectsList(loteRepository.findAll(), LoteDTO.class);
+    }
 }
