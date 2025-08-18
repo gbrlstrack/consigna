@@ -1,5 +1,6 @@
 package com.consigna.consigna.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serial;
@@ -13,7 +14,7 @@ public class PecaDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private long id;
+    private Long id;
     private String nome;
     private Integer quantidade;
     private Double valor_solicitado;
@@ -21,13 +22,14 @@ public class PecaDTO implements Serializable {
     private String status;
     private List<String> palavras_chave;
     private Double valor_de_venda;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date data_alteracao_status;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -98,7 +100,7 @@ public class PecaDTO implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof PecaDTO pecaDTO)) return false;
-        return getId() == pecaDTO.getId() && Objects.equals(getNome(), pecaDTO.getNome()) && Objects.equals(getQuantidade(), pecaDTO.getQuantidade()) && Objects.equals(getValor_solicitado(), pecaDTO.getValor_solicitado()) && Objects.equals(getValor_minimo(), pecaDTO.getValor_minimo()) && Objects.equals(getStatus(), pecaDTO.getStatus()) && Objects.equals(getPalavras_chave(), pecaDTO.getPalavras_chave()) && Objects.equals(getValor_de_venda(), pecaDTO.getValor_de_venda()) && Objects.equals(getData_alteracao_status(), pecaDTO.getData_alteracao_status());
+        return Objects.equals(getId(), pecaDTO.getId()) && Objects.equals(getNome(), pecaDTO.getNome()) && Objects.equals(getQuantidade(), pecaDTO.getQuantidade()) && Objects.equals(getValor_solicitado(), pecaDTO.getValor_solicitado()) && Objects.equals(getValor_minimo(), pecaDTO.getValor_minimo()) && Objects.equals(getStatus(), pecaDTO.getStatus()) && Objects.equals(getPalavras_chave(), pecaDTO.getPalavras_chave()) && Objects.equals(getValor_de_venda(), pecaDTO.getValor_de_venda()) && Objects.equals(getData_alteracao_status(), pecaDTO.getData_alteracao_status());
     }
 
     @Override

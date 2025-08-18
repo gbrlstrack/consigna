@@ -22,6 +22,11 @@ public class Consignatario {
     @Column(name = "telefone", length = 14)
     private String telefone;
 
+    @Column(name = "documento")
+    private String documento;
+
+    @Column(name = "tipo_documento")
+    private String tipoDocumento;
     // Getters e Setters
 
 

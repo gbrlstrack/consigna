@@ -3,8 +3,8 @@ CREATE TABLE IF NOT EXISTS Consignatario (
     nome VARCHAR(50) NOT NULL,
     tipo VARCHAR(20) NOT NULL,
     telefone VARCHAR(14) NOT NULL,
-    cpf VARCHAR(11),
-    cnpj VARCHAR(14)
+    tipo_documento VARCHAR(11),
+    documento VARCHAR(14)
 );
 
 CREATE TABLE IF NOT EXISTS Categoria (
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS Lote (
     id SERIAL PRIMARY KEY,
     data_entrada DATE DEFAULT CURRENT_DATE,
     data_fechamento DATE,
-    status INTEGER,
+    status VARCHAR(15),
     valor_total NUMERIC(10,2),
     fk_Consignatario_id INTEGER NOT NULL,
     fk_Usuario_id INTEGER NOT NULL,

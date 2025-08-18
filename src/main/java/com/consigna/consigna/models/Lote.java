@@ -1,6 +1,7 @@
 package com.consigna.consigna.models;
 import jakarta.persistence.*;
-import java.time.LocalDate;
+
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -13,13 +14,13 @@ public class Lote {
     private Long id;
 
     @Column(name = "data_entrada")
-    private LocalDate dataEntrada;
+    private Date dataEntrada;
 
     @Column(name = "data_fechamento")
-    private LocalDate dataFechamento;
+    private Date dataFechamento;
 
     @Column(name = "status")
-    private Integer status;
+    private String status;
 
     @Column(name = "valor_total")
     private Double valorTotal;
@@ -32,9 +33,6 @@ public class Lote {
     @JoinColumn(name = "fk_Usuario_id", nullable = false)
     private Usuario usuario;
 
-    // Getters e Setters
-
-
     public Long getId() {
         return id;
     }
@@ -43,27 +41,27 @@ public class Lote {
         this.id = id;
     }
 
-    public LocalDate getDataEntrada() {
+    public Date getDataEntrada() {
         return dataEntrada;
     }
 
-    public void setDataEntrada(LocalDate dataEntrada) {
+    public void setDataEntrada(Date dataEntrada) {
         this.dataEntrada = dataEntrada;
     }
 
-    public LocalDate getDataFechamento() {
+    public Date getDataFechamento() {
         return dataFechamento;
     }
 
-    public void setDataFechamento(LocalDate dataFechamento) {
+    public void setDataFechamento(Date dataFechamento) {
         this.dataFechamento = dataFechamento;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -93,13 +91,12 @@ public class Lote {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Lote lote = (Lote) o;
-        return Objects.equals(id, lote.id) && Objects.equals(dataEntrada, lote.dataEntrada) && Objects.equals(dataFechamento, lote.dataFechamento) && Objects.equals(status, lote.status) && Objects.equals(valorTotal, lote.valorTotal) && Objects.equals(consignatario, lote.consignatario) && Objects.equals(usuario, lote.usuario);
+        if (!(o instanceof Lote lote)) return false;
+        return Objects.equals(getId(), lote.getId()) && Objects.equals(getDataEntrada(), lote.getDataEntrada()) && Objects.equals(getDataFechamento(), lote.getDataFechamento()) && Objects.equals(getStatus(), lote.getStatus()) && Objects.equals(getValorTotal(), lote.getValorTotal()) && Objects.equals(getConsignatario(), lote.getConsignatario()) && Objects.equals(getUsuario(), lote.getUsuario());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, dataEntrada, dataFechamento, status, valorTotal, consignatario, usuario);
+        return Objects.hash(getId(), getDataEntrada(), getDataFechamento(), getStatus(), getValorTotal(), getConsignatario(), getUsuario());
     }
 }
