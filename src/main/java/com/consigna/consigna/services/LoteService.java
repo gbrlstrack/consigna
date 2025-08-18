@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.consigna.consigna.exceptions.ResourceNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.consigna.consigna.mapper.ObjectMapper.parseObjectsList;
 import static com.consigna.consigna.mapper.ObjectMapper.parseObject;
@@ -31,7 +32,12 @@ public class LoteService {
 
     private final PecaRepository pecaRepository; // para buscar peças depois
 
+    @Transactional
     public LoteDTO createLoteWithPecas(LoteDTO lote) {
+
+        if (lote.getPecas() == null || lote.getPecas().isEmpty()) {
+            throw new IllegalArgumentException("Lote precisa ter pelo menos uma peça.");
+        }
 
         Consignatario consignatario = consignatarioRepository.findById(lote.getConsignatarioId())
                 .orElseThrow(() -> new IllegalArgumentException("Consignatario não encontrado com o ID: " + lote.getConsignatarioId()));

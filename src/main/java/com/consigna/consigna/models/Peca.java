@@ -23,7 +23,7 @@ public class Peca {
     private Double valorMinimo;
 
     @Column(name = "status")
-    private Integer status;
+    private String status;
 
     @Column(name = "palavras_chave", length = 50)
     private String palavrasChave;
@@ -39,14 +39,14 @@ public class Peca {
 
     @ManyToOne
     @JoinColumn(name = "fk_Lote_id", nullable = false)
-    private Lote lote;
+    private Lote loteId;
 
     @ManyToOne
     @JoinColumn(name = "fk_Categoria_id", nullable = false)
     private Categoria categoria;
 
-    // Getters e Setters
-
+    @Column
+    private Integer quantidade;
 
     public Long getId() {
         return id;
@@ -80,11 +80,11 @@ public class Peca {
         this.valorMinimo = valorMinimo;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -120,12 +120,12 @@ public class Peca {
         this.dataPagamentoConsignatario = dataPagamentoConsignatario;
     }
 
-    public Lote getLote() {
-        return lote;
+    public Lote getLoteId() {
+        return loteId;
     }
 
-    public void setLote(Lote lote) {
-        this.lote = lote;
+    public void setLoteId(Lote loteId) {
+        this.loteId = loteId;
     }
 
     public Categoria getCategoria() {
@@ -136,15 +136,22 @@ public class Peca {
         this.categoria = categoria;
     }
 
+    public Integer getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(Integer quantidade) {
+        this.quantidade = quantidade;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Peca peca = (Peca) o;
-        return Objects.equals(id, peca.id) && Objects.equals(nome, peca.nome) && Objects.equals(valorSolicitado, peca.valorSolicitado) && Objects.equals(valorMinimo, peca.valorMinimo) && Objects.equals(status, peca.status) && Objects.equals(palavrasChave, peca.palavrasChave) && Objects.equals(valorDeVenda, peca.valorDeVenda) && Objects.equals(dataAlteracaoStatus, peca.dataAlteracaoStatus) && Objects.equals(dataPagamentoConsignatario, peca.dataPagamentoConsignatario) && Objects.equals(lote, peca.lote) && Objects.equals(categoria, peca.categoria);
+        if (!(o instanceof Peca peca)) return false;
+        return getQuantidade() == peca.getQuantidade() && Objects.equals(getId(), peca.getId()) && Objects.equals(getNome(), peca.getNome()) && Objects.equals(getValorSolicitado(), peca.getValorSolicitado()) && Objects.equals(getValorMinimo(), peca.getValorMinimo()) && Objects.equals(getStatus(), peca.getStatus()) && Objects.equals(getPalavrasChave(), peca.getPalavrasChave()) && Objects.equals(getValorDeVenda(), peca.getValorDeVenda()) && Objects.equals(getDataAlteracaoStatus(), peca.getDataAlteracaoStatus()) && Objects.equals(getDataPagamentoConsignatario(), peca.getDataPagamentoConsignatario()) && Objects.equals(getLoteId(), peca.getLoteId()) && Objects.equals(getCategoria(), peca.getCategoria());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nome, valorSolicitado, valorMinimo, status, palavrasChave, valorDeVenda, dataAlteracaoStatus, dataPagamentoConsignatario, lote, categoria);
+        return Objects.hash(getId(), getNome(), getValorSolicitado(), getValorMinimo(), getStatus(), getPalavrasChave(), getValorDeVenda(), getDataAlteracaoStatus(), getDataPagamentoConsignatario(), getLoteId(), getCategoria(), getQuantidade());
     }
 }
