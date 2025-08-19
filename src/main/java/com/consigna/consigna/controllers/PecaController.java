@@ -1,7 +1,6 @@
 package com.consigna.consigna.controllers;
 
 
-import com.consigna.consigna.dtos.LoteDTO;
 import com.consigna.consigna.dtos.PecaDTO;
 import com.consigna.consigna.services.PecaService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,7 @@
 package com.consigna.consigna.controllers;
 
-import com.consigna.consigna.dtos.LoteDTO;
+import com.consigna.consigna.dtos.LoteRequestDTO;
+import com.consigna.consigna.dtos.LoteResponseDTO;
 import com.consigna.consigna.services.LoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,18 +19,18 @@ public class LoteController {
     private LoteService loteService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LoteDTO> createLote(@RequestBody LoteDTO request){
-        LoteDTO response = loteService.createLoteWithPecas(request);
+    public ResponseEntity<LoteResponseDTO> createLote(@RequestBody LoteRequestDTO request){
+        LoteResponseDTO response = loteService.createLoteWithPecas(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     };
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<LoteDTO> findAll() {
+    public List<LoteResponseDTO> findAll() {
         return loteService.getAll();
     };
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public LoteDTO findById(@PathVariable("id") Long id) {
+    public LoteResponseDTO findById(@PathVariable("id") Long id) {
         return loteService.getById(id);
     }
 }

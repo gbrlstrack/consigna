@@ -1,6 +1,7 @@
 package com.consigna.consigna.models;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.Objects;
 
@@ -62,15 +63,30 @@ public class Consignatario {
         this.telefone = telefone;
     }
 
+    public String getDocumento() {
+        return documento;
+    }
+
+    public void setDocumento(String documento) {
+        this.documento = documento;
+    }
+
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Consignatario that = (Consignatario) o;
-        return Objects.equals(id, that.id) && Objects.equals(nome, that.nome) && Objects.equals(tipo, that.tipo) && Objects.equals(telefone, that.telefone);
+        if (!(o instanceof Consignatario that)) return false;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getNome(), that.getNome()) && Objects.equals(getTipo(), that.getTipo()) && Objects.equals(getTelefone(), that.getTelefone()) && Objects.equals(getDocumento(), that.getDocumento()) && Objects.equals(getTipoDocumento(), that.getTipoDocumento());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nome, tipo, telefone);
+        return Objects.hash(getId(), getNome(), getTipo(), getTelefone(), getDocumento(), getTipoDocumento());
     }
 }

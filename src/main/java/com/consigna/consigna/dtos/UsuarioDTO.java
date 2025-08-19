@@ -1,5 +1,12 @@
 package com.consigna.consigna.dtos;
 
 
-public class UsuarioDTO {
+import lombok.Data;
+
+import java.io.Serializable;
+
+@Data
+public class UsuarioDTO implements Serializable {
+    private Long id;
+    private String nome;
 }

@@ -7,21 +7,21 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Data
-public class PecaDTO implements Serializable {
+public class LoteResponseDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
     private Long id;
-    private String nome;
-    private Integer quantidade;
-    private Double valorSolicitado;
-    private Double valorMinimo;
+    private List<PecaDTO> pecas;
     private String status;
-    private List<String> palavrasChave;
-    private Double valorDeVenda;
+    private Double valorTotal;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date dataAlteracaoStatus;
+    private Date dataEntrada;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date dataFechamento;
+    private ConsignatarioDTO consignatario;
+    private UsuarioDTO usuario;
+
 }

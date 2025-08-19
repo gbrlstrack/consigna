@@ -1,6 +1,7 @@
 package com.consigna.consigna.services;
 
-import com.consigna.consigna.dtos.LoteDTO;
+import com.consigna.consigna.dtos.LoteRequestDTO;
+import com.consigna.consigna.dtos.LoteResponseDTO;
 import com.consigna.consigna.models.Consignatario;
 import com.consigna.consigna.models.Lote;
 import com.consigna.consigna.models.Usuario;
@@ -33,7 +34,7 @@ public class LoteService {
     private final PecaRepository pecaRepository; // para buscar peças depois
 
     @Transactional
-    public LoteDTO createLoteWithPecas(LoteDTO lote) {
+    public LoteResponseDTO createLoteWithPecas(LoteRequestDTO lote) {
 
         if (lote.getPecas() == null || lote.getPecas().isEmpty()) {
             throw new IllegalArgumentException("Lote precisa ter pelo menos uma peça.");
@@ -50,15 +51,15 @@ public class LoteService {
         entity.setUsuario(usuario);
         System.out.println(entity);
         System.out.println("Lote: " + lote);
-        return parseObject(loteRepository.save(entity), LoteDTO.class);
+        return parseObject(loteRepository.save(entity), LoteResponseDTO.class);
     }
 
-    public LoteDTO getById(Long id) {
+    public LoteResponseDTO getById(Long id) {
         var lote = loteRepository.findByIdWithPecas(id).orElseThrow(() -> new ResourceNotFoundException("Lote not found"));
-        return parseObject(lote, LoteDTO.class);
+        return parseObject(lote, LoteResponseDTO.class);
     }
 
-    public List<LoteDTO> getAll() {
-        return parseObjectsList(loteRepository.findAllWithPecas(), LoteDTO.class);
+    public List<LoteResponseDTO> getAll() {
+        return parseObjectsList(loteRepository.findAllWithPecas(), LoteResponseDTO.class);
     }
 }

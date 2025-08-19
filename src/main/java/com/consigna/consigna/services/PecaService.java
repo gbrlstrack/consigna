@@ -1,6 +1,5 @@
 package com.consigna.consigna.services;
 
-import com.consigna.consigna.dtos.LoteDTO;
 import com.consigna.consigna.dtos.PecaDTO;
 import com.consigna.consigna.exceptions.ResourceNotFoundException;
 import com.consigna.consigna.repository.PecaRepository;

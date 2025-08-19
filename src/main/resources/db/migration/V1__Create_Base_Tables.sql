@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS Peca (
     nome VARCHAR(50) NOT NULL,
     valor_solicitado NUMERIC(10,2) NOT NULL,
     valor_minimo NUMERIC(10,2) NOT NULL,
-    status INTEGER,
+    status VARCHAR(15),
     palavras_chave VARCHAR(50),
     valor_de_venda NUMERIC(10,2),
     data_alteracao_status DATE,
