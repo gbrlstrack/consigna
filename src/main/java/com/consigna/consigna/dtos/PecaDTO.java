@@ -22,9 +22,10 @@ public class PecaDTO implements Serializable {
     private String status;
     private List<String> palavrasChave;
     private Double valorDeVenda;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date dataAlteracaoStatus;
-    private Date dataPagamentoConsignatario;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+//    private Date dataPagamentoConsignatario;
 
     public Long getId() {
         return id;
@@ -98,22 +99,14 @@ public class PecaDTO implements Serializable {
         this.dataAlteracaoStatus = dataAlteracaoStatus;
     }
 
-    public Date getDataPagamentoConsignatario() {
-        return dataPagamentoConsignatario;
-    }
-
-    public void setDataPagamentoConsignatario(Date dataPagamentoConsignatario) {
-        this.dataPagamentoConsignatario = dataPagamentoConsignatario;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof PecaDTO pecaDTO)) return false;
-        return Objects.equals(getId(), pecaDTO.getId()) && Objects.equals(getNome(), pecaDTO.getNome()) && Objects.equals(getQuantidade(), pecaDTO.getQuantidade()) && Objects.equals(getValorSolicitado(), pecaDTO.getValorSolicitado()) && Objects.equals(getValorMinimo(), pecaDTO.getValorMinimo()) && Objects.equals(getStatus(), pecaDTO.getStatus()) && Objects.equals(getPalavrasChave(), pecaDTO.getPalavrasChave()) && Objects.equals(getValorDeVenda(), pecaDTO.getValorDeVenda()) && Objects.equals(getDataAlteracaoStatus(), pecaDTO.getDataAlteracaoStatus()) && Objects.equals(getDataPagamentoConsignatario(), pecaDTO.getDataPagamentoConsignatario());
+        return Objects.equals(getId(), pecaDTO.getId()) && Objects.equals(getNome(), pecaDTO.getNome()) && Objects.equals(getQuantidade(), pecaDTO.getQuantidade()) && Objects.equals(getValorSolicitado(), pecaDTO.getValorSolicitado()) && Objects.equals(getValorMinimo(), pecaDTO.getValorMinimo()) && Objects.equals(getStatus(), pecaDTO.getStatus()) && Objects.equals(getPalavrasChave(), pecaDTO.getPalavrasChave()) && Objects.equals(getValorDeVenda(), pecaDTO.getValorDeVenda()) && Objects.equals(getDataAlteracaoStatus(), pecaDTO.getDataAlteracaoStatus());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getNome(), getQuantidade(), getValorSolicitado(), getValorMinimo(), getStatus(), getPalavrasChave(), getValorDeVenda(), getDataAlteracaoStatus(), getDataPagamentoConsignatario());
+        return Objects.hash(getId(), getNome(), getQuantidade(), getValorSolicitado(), getValorMinimo(), getStatus(), getPalavrasChave(), getValorDeVenda(), getDataAlteracaoStatus());
     }
 }

@@ -54,11 +54,11 @@ public class LoteService {
     }
 
     public LoteDTO getById(Long id) {
-        var lote = loteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lote not found"));
+        var lote = loteRepository.findByIdWithPecas(id).orElseThrow(() -> new ResourceNotFoundException("Lote not found"));
         return parseObject(lote, LoteDTO.class);
     }
 
     public List<LoteDTO> getAll() {
-        return parseObjectsList(loteRepository.findAll(), LoteDTO.class);
+        return parseObjectsList(loteRepository.findAllWithPecas(), LoteDTO.class);
     }
 }

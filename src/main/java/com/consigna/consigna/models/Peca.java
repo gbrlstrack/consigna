@@ -34,12 +34,12 @@ public class Peca {
     @Column(name = "data_alteracao_status")
     private LocalDate dataAlteracaoStatus;
 
-    @Column(name = "data_pagamento_consignatario")
-    private LocalDate dataPagamentoConsignatario;
+//    @Column(name = "data_pagamento_consignatario")
+//    private LocalDate dataPagamentoConsignatario;
 
     @ManyToOne
     @JoinColumn(name = "fk_Lote_id", nullable = false)
-    private Lote loteId;
+    private Lote lote;
 
     @ManyToOne
     @JoinColumn(name = "fk_Categoria_id", nullable = false)
@@ -112,20 +112,12 @@ public class Peca {
         this.dataAlteracaoStatus = dataAlteracaoStatus;
     }
 
-    public LocalDate getDataPagamentoConsignatario() {
-        return dataPagamentoConsignatario;
+    public Lote getLote() {
+        return lote;
     }
 
-    public void setDataPagamentoConsignatario(LocalDate dataPagamentoConsignatario) {
-        this.dataPagamentoConsignatario = dataPagamentoConsignatario;
-    }
-
-    public Lote getLoteId() {
-        return loteId;
-    }
-
-    public void setLoteId(Lote loteId) {
-        this.loteId = loteId;
+    public void setLote(Lote lote) {
+        this.lote = lote;
     }
 
     public Categoria getCategoria() {
@@ -147,11 +139,11 @@ public class Peca {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Peca peca)) return false;
-        return getQuantidade() == peca.getQuantidade() && Objects.equals(getId(), peca.getId()) && Objects.equals(getNome(), peca.getNome()) && Objects.equals(getValorSolicitado(), peca.getValorSolicitado()) && Objects.equals(getValorMinimo(), peca.getValorMinimo()) && Objects.equals(getStatus(), peca.getStatus()) && Objects.equals(getPalavrasChave(), peca.getPalavrasChave()) && Objects.equals(getValorDeVenda(), peca.getValorDeVenda()) && Objects.equals(getDataAlteracaoStatus(), peca.getDataAlteracaoStatus()) && Objects.equals(getDataPagamentoConsignatario(), peca.getDataPagamentoConsignatario()) && Objects.equals(getLoteId(), peca.getLoteId()) && Objects.equals(getCategoria(), peca.getCategoria());
+        return Objects.equals(getId(), peca.getId()) && Objects.equals(getNome(), peca.getNome()) && Objects.equals(getValorSolicitado(), peca.getValorSolicitado()) && Objects.equals(getValorMinimo(), peca.getValorMinimo()) && Objects.equals(getStatus(), peca.getStatus()) && Objects.equals(getPalavrasChave(), peca.getPalavrasChave()) && Objects.equals(getValorDeVenda(), peca.getValorDeVenda()) && Objects.equals(getDataAlteracaoStatus(), peca.getDataAlteracaoStatus()) && Objects.equals(getLote(), peca.getLote()) && Objects.equals(getCategoria(), peca.getCategoria()) && Objects.equals(getQuantidade(), peca.getQuantidade());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getNome(), getValorSolicitado(), getValorMinimo(), getStatus(), getPalavrasChave(), getValorDeVenda(), getDataAlteracaoStatus(), getDataPagamentoConsignatario(), getLoteId(), getCategoria(), getQuantidade());
+        return Objects.hash(getId(), getNome(), getValorSolicitado(), getValorMinimo(), getStatus(), getPalavrasChave(), getValorDeVenda(), getDataAlteracaoStatus(), getLote(), getCategoria(), getQuantidade());
     }
 }

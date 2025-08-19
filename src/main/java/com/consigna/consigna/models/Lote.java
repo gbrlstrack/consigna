@@ -2,6 +2,7 @@ package com.consigna.consigna.models;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -32,6 +33,10 @@ public class Lote {
     @ManyToOne
     @JoinColumn(name = "fk_Usuario_id", nullable = false)
     private Usuario usuario;
+
+    @OneToMany(mappedBy = "lote", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Peca> pecas;
+
 
     public Long getId() {
         return id;
@@ -89,14 +94,22 @@ public class Lote {
         this.usuario = usuario;
     }
 
+    public List<Peca> getPecas() {
+        return pecas;
+    }
+
+    public void setPecas(List<Peca> pecas) {
+        this.pecas = pecas;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Lote lote)) return false;
-        return Objects.equals(getId(), lote.getId()) && Objects.equals(getDataEntrada(), lote.getDataEntrada()) && Objects.equals(getDataFechamento(), lote.getDataFechamento()) && Objects.equals(getStatus(), lote.getStatus()) && Objects.equals(getValorTotal(), lote.getValorTotal()) && Objects.equals(getConsignatario(), lote.getConsignatario()) && Objects.equals(getUsuario(), lote.getUsuario());
+        return Objects.equals(getId(), lote.getId()) && Objects.equals(getDataEntrada(), lote.getDataEntrada()) && Objects.equals(getDataFechamento(), lote.getDataFechamento()) && Objects.equals(getStatus(), lote.getStatus()) && Objects.equals(getValorTotal(), lote.getValorTotal()) && Objects.equals(getConsignatario(), lote.getConsignatario()) && Objects.equals(getUsuario(), lote.getUsuario()) && Objects.equals(getPecas(), lote.getPecas());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getDataEntrada(), getDataFechamento(), getStatus(), getValorTotal(), getConsignatario(), getUsuario());
+        return Objects.hash(getId(), getDataEntrada(), getDataFechamento(), getStatus(), getValorTotal(), getConsignatario(), getUsuario(), getPecas());
     }
 }
