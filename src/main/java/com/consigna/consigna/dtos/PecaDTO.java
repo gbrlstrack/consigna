@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -23,5 +24,5 @@ public class PecaDTO implements Serializable {
     private List<String> palavrasChave;
     private Double valorDeVenda;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date dataAlteracaoStatus;
+    private LocalDateTime dataAlteracaoStatus;
 }

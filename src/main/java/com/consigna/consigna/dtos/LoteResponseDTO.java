@@ -5,6 +5,8 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -18,9 +20,9 @@ public class LoteResponseDTO implements Serializable {
     private String status;
     private Double valorTotal;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date dataEntrada;
+    private LocalDateTime dataEntrada;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date dataFechamento;
+    private LocalDateTime dataFechamento;
     private ConsignatarioDTO consignatario;
     private UsuarioDTO usuario;
 

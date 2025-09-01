@@ -1,0 +1,2 @@
+ALTER TABLE Peca
+ALTER COLUMN data_alteracao_status TYPE TIMESTAMP

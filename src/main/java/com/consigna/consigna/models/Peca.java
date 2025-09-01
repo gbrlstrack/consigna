@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -39,7 +40,7 @@ public class Peca {
     private Double valorDeVenda;
 
     @Column(name = "data_alteracao_status")
-    private LocalDate dataAlteracaoStatus;
+    private LocalDateTime dataAlteracaoStatus;
 
     @ManyToOne
     @JoinColumn(name = "fk_Lote_id", nullable = false)

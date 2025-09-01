@@ -2,6 +2,7 @@ package com.consigna.consigna.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -21,10 +22,10 @@ public class Lote {
     private Long id;
 
     @Column(name = "data_entrada")
-    private Date dataEntrada;
+    private LocalDateTime dataEntrada;
 
     @Column(name = "data_fechamento")
-    private Date dataFechamento;
+    private LocalDateTime dataFechamento;
 
     @Column(name = "status")
     private String status;
