@@ -1,6 +1,7 @@
 package com.consigna.consigna.services;
 
 import com.consigna.consigna.dtos.ConsignatarioDTO;
+import com.consigna.consigna.exceptions.ResourceNotFoundException;
 import com.consigna.consigna.models.Consignatario;
 import com.consigna.consigna.repository.ConsignatarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,24 @@ public class ConsignatarioService {
 
     public List<ConsignatarioDTO> getAll(){
         return parseObjectsList(consignatarioRepository.findAll(), ConsignatarioDTO.class);
+    }
+
+    public ConsignatarioDTO update(Long id, ConsignatarioDTO dto) {
+        var entity = consignatarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Consignatario not found with id " + id));
+
+        entity.setNome(dto.getNome());
+        entity.setDocumento(dto.getDocumento());
+        entity.setTipoDocumento(dto.getDocumento());
+        entity.setTelefone(dto.getTelefone());
+
+        return parseObject(consignatarioRepository.save(entity), ConsignatarioDTO.class);
+    }
+
+    public void delete(Long id) {
+        var entity = consignatarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Consignatario not found with id " + id));
+
+        consignatarioRepository.delete(entity);
     }
 }

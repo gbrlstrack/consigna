@@ -62,4 +62,12 @@ public class LoteService {
     public List<LoteResponseDTO> getAll() {
         return parseObjectsList(loteRepository.findAllWithPecas(), LoteResponseDTO.class);
     }
+
+    @Transactional
+    public void delete(Long id) {
+        var lote = loteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Lote not found"));
+        loteRepository.delete(lote);
+    }
+    
 }

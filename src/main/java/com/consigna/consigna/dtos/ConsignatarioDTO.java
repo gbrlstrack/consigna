@@ -13,4 +13,5 @@ public class ConsignatarioDTO implements Serializable {
     private String telefone;
     private String tipoDocumento;
     private String documento;
+    private String email;
 }

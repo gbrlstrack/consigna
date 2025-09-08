@@ -30,4 +30,21 @@ public class UsuarioService {
     public List<UsuarioDTO> getAll() {
         return parseObjectsList(usuarioRepository.findAll(), UsuarioDTO.class);
     }
+
+    public UsuarioDTO update(Long id, UsuarioDTO usuarioDTO) {
+        var usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com id: " + id));
+
+        usuario.setNome(usuarioDTO.getNome());
+        usuario.setUsuario(usuarioDTO.getUsuario());
+        usuario.setSenha(usuarioDTO.getSenha());
+
+        return parseObject(usuarioRepository.save(usuario), UsuarioDTO.class);
+    }
+
+    public void delete(Long id) {
+        var usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com id: " + id));
+        usuarioRepository.delete(usuario);
+    }
 }
