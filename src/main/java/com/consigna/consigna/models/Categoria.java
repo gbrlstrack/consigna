@@ -16,9 +16,6 @@ public class Categoria {
     @Column(name = "nome", length = 20)
     private String nome;
 
-    // Getters e Setters
-
-
     public Long getId() {
         return id;
     }

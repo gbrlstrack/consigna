@@ -1,5 +1,6 @@
 package com.consigna.consigna.controllers;
 
+import com.consigna.consigna.dtos.PecaDTO;
 import com.consigna.consigna.dtos.UsuarioDTO;
 import com.consigna.consigna.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,15 @@ public class UsuarioController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UsuarioDTO> getAll() {
         return usuarioService.getAll();
+    }
+
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public UsuarioDTO update(@PathVariable Long id, @RequestBody UsuarioDTO usuario) {
+        return usuarioService.update(id, usuario);
+    }
+
+    @DeleteMapping(value = "/id")
+    public void delete(@PathVariable Long id) {
+        usuarioService.delete(id);
     }
 }

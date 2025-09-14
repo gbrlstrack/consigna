@@ -1,6 +1,7 @@
 package com.consigna.consigna.services;
 
 import com.consigna.consigna.dtos.CategoriaDTO;
+import com.consigna.consigna.exceptions.ResourceNotFoundException;
 import com.consigna.consigna.models.Categoria;
 import com.consigna.consigna.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,20 @@ public class CategoriaService {
 
     public List<CategoriaDTO> getAll() {
         return parseObjectsList(categoriaRepository.findAll(), CategoriaDTO.class);
+    }
+
+    public CategoriaDTO update(Long id, CategoriaDTO dto) {
+        var categoria = categoriaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Categoria not found"));
+
+        categoria.setNome(dto.getNome());
+
+        var updated = categoriaRepository.save(categoria);
+        return parseObject(updated, CategoriaDTO.class);
+    }
+
+    public void delete(Long id) {
+        var categoria = categoriaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria not found"));
+        categoriaRepository.delete(categoria);
     }
 }
