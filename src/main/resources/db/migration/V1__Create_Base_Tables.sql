@@ -33,8 +33,7 @@ CREATE TABLE IF NOT EXISTS Lote (
 
 CREATE TABLE IF NOT EXISTS Peca (
     id SERIAL PRIMARY KEY,
-    nome VARCHAR(50) NOT NULL,
-    valor_solicitado NUMERIC(10,2) NOT NULL,
+    descricao VARCHAR(50) NOT NULL,
     valor_minimo NUMERIC(10,2),
     status VARCHAR(15),
     palavras_chave VARCHAR(50),
@@ -43,7 +42,7 @@ CREATE TABLE IF NOT EXISTS Peca (
     data_alteracao_status DATE,
     quantidade INTEGER NOT NULL DEFAULT 1,
     fk_Lote_id INTEGER,
-    fk_Categoria_id INTEGER NOT NULL,
+    fk_Categoria_id INTEGER,
     CONSTRAINT FK_Peca_2 FOREIGN KEY (fk_Lote_id) REFERENCES Lote (id) ON DELETE RESTRICT,
     CONSTRAINT FK_Peca_3 FOREIGN KEY (fk_Categoria_id) REFERENCES Categoria (id) ON DELETE RESTRICT
 );

@@ -21,11 +21,8 @@ public class Peca {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "nome", length = 50)
-    private String nome;
-
-    @Column(name = "valor_solicitado")
-    private Double valorSolicitado;
+    @Column(name = "descricao", length = 50)
+    private String descricao;
 
     @Column(name = "valor_minimo")
     private Double valorMinimo;

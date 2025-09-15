@@ -4,6 +4,7 @@ import com.consigna.consigna.dtos.ConsignatarioDTO;
 import com.consigna.consigna.services.ConsignatarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,8 +36,9 @@ public class ConsignatarioController {
         return consignatarioService.update(id, consignatario);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable Long id) {
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         consignatarioService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

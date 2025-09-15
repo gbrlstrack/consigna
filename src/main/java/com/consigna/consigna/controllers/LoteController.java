@@ -38,8 +38,9 @@ public class LoteController {
         return loteService.getById(id);
     }
 
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@PathVariable("id") Long id) {
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> update(@PathVariable("id") Long id) {
         loteService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

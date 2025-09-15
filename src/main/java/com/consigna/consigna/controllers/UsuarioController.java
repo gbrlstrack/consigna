@@ -5,6 +5,7 @@ import com.consigna.consigna.dtos.UsuarioDTO;
 import com.consigna.consigna.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,8 +37,9 @@ public class UsuarioController {
         return usuarioService.update(id, usuario);
     }
 
-    @DeleteMapping(value = "/id")
-    public void delete(@PathVariable Long id) {
+    @DeleteMapping(value = "/id", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         usuarioService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

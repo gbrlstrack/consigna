@@ -23,9 +23,9 @@ BEGIN
         fk_Consignatario_id,
         fk_Usuario_id
     ) VALUES (
-        p_data_entrada,
+        CURRENT_DATE,
         p_data_fechamento,
-        p_status,
+        'ATIVO',
         p_valor_total,
         p_fk_consignatario_id,
         p_fk_usuario_id
@@ -35,7 +35,7 @@ BEGIN
     FOR peca IN SELECT * FROM jsonb_array_elements(p_pecas)
     LOOP
         INSERT INTO Peca (
-            nome,
+            descricao,
             valor_solicitado,
             valor_minimo,
             status,
@@ -45,7 +45,7 @@ BEGIN
             fk_Lote_id,
             fk_Categoria_id
         ) VALUES (
-            peca->>'nome',
+            peca->>'descricao',
             (peca->>'valor_solicitado')::NUMERIC,
             (peca->>'valor_minimo')::NUMERIC,
             (peca->>'status')::INTEGER,

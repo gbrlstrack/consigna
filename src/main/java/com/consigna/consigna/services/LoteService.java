@@ -2,6 +2,7 @@ package com.consigna.consigna.services;
 
 import com.consigna.consigna.dtos.LoteRequestDTO;
 import com.consigna.consigna.dtos.LoteResponseDTO;
+import com.consigna.consigna.enums.StatusPeca;
 import com.consigna.consigna.models.*;
 import com.consigna.consigna.repository.ConsignatarioRepository;
 import com.consigna.consigna.repository.LoteRepository;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.consigna.consigna.mapper.ObjectMapper.parseObjectsList;
 import static com.consigna.consigna.mapper.ObjectMapper.parseObject;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,8 +49,8 @@ public class LoteService {
 
         Lote loteEntity = new Lote();
 
-        loteEntity.setDataEntrada(loteDto.getDataEntrada());
-        loteEntity.setStatus(loteDto.getStatus());
+        loteEntity.setStatus(StatusPeca.ATIVO.name());
+        loteEntity.setDataEntrada(LocalDateTime.now());
         loteEntity.setConsignatario(consignatario);
         loteEntity.setUsuario(usuario);
 
@@ -56,7 +58,7 @@ public class LoteService {
                 .map(pecaDto -> {
                     Peca peca = new Peca();
 
-                    peca.setNome(pecaDto.getDescricao());
+                    peca.setDescricao(pecaDto.getDescricao());
                     peca.setQuantidade(pecaDto.getQuantidade());
                     peca.setValorMinimo(pecaDto.getValorMinimo());
                     peca.setStatus(pecaDto.getStatus());
@@ -72,7 +74,6 @@ public class LoteService {
                 .collect(Collectors.toList());
 
         loteEntity.setPecas(pecas);
-
         Lote savedLote = loteRepository.save(loteEntity);
 
         return parseObject(savedLote, LoteResponseDTO.class);

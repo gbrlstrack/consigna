@@ -6,6 +6,7 @@ import com.consigna.consigna.dtos.PecaDTO;
 import com.consigna.consigna.services.PecaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,8 +35,9 @@ public class PecaController {
         return pecaService.update(id, peca);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable Long id) {
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         pecaService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
