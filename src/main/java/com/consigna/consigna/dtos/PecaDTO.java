@@ -1,5 +1,6 @@
 package com.consigna.consigna.dtos;
 
+import com.consigna.consigna.models.Lote;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -20,9 +21,10 @@ public class PecaDTO implements Serializable {
     private Integer quantidade;
     private Double valorMinimo;
     private String status;
-    private List<String> palavrasChave;
+    private String palavrasChave;
     private Double valorDeVenda;
     private Double valorDeRepasse;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime dataAlteracaoStatus;
+    private Long loteId;
 }

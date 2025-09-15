@@ -4,11 +4,14 @@ import com.consigna.consigna.dtos.PecaDTO;
 import com.consigna.consigna.dtos.PecaSaidaDTORequest;
 import com.consigna.consigna.enums.StatusPeca;
 import com.consigna.consigna.exceptions.ResourceNotFoundException;
+import com.consigna.consigna.models.Peca;
 import com.consigna.consigna.repository.PecaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.consigna.consigna.mapper.ObjectMapper.parseObject;
 import static com.consigna.consigna.mapper.ObjectMapper.parseObjectsList;
@@ -24,8 +27,31 @@ public class PecaService {
         return parseObject(peca, PecaDTO.class);
     }
 
+    @Transactional
     public List<PecaDTO> getAll() {
-        return parseObjectsList(pecaRepository.findAll(), PecaDTO.class);
+        List<Peca> pecas = pecaRepository.findAll();
+
+        return pecas.stream()
+                .map(peca -> {
+                    PecaDTO dto = new PecaDTO();
+                    dto.setId(peca.getId());
+                    dto.setDescricao(peca.getDescricao());
+                    dto.setQuantidade(peca.getQuantidade());
+                    dto.setValorMinimo(peca.getValorMinimo());
+                    dto.setStatus(peca.getStatus());
+                    dto.setPalavrasChave(peca.getPalavrasChave()); // ⚠️ Verifique como você lida com a lista de String
+                    dto.setValorDeVenda(peca.getValorDeVenda());
+                    dto.setValorDeRepasse(peca.getValorDeRepasse());
+                    dto.setDataAlteracaoStatus(peca.getDataAlteracaoStatus());
+
+                    // 💡 Pega o ID do lote e o associa à DTO
+                    if (peca.getLote() != null) {
+                        dto.setLoteId(peca.getLote().getId());
+                    }
+
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     public List<PecaSaidaDTORequest> pecaSaida(List<PecaSaidaDTORequest> request, String status) {
