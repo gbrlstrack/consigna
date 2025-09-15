@@ -47,8 +47,8 @@ public class PecaService {
         var peca = pecaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Peça not found"));
 
-        peca.setNome(dto.getNome());
-        peca.setValorSolicitado(dto.getValorSolicitado());
+        peca.setNome(dto.getDescricao());
+        peca.setValorDeRepasse(dto.getValorDeRepasse());
         peca.setValorMinimo(dto.getValorMinimo());
         peca.setQuantidade(dto.getQuantidade());
         peca.setValorDeVenda(dto.getValorDeVenda());

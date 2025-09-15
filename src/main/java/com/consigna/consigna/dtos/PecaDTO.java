@@ -16,14 +16,13 @@ public class PecaDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-    private String nome;
+    private String descricao;
     private Integer quantidade;
-    private Double valorSolicitado;
     private Double valorMinimo;
     private String status;
     private List<String> palavrasChave;
     private Double valorDeVenda;
-    private Double valorDRepasse;
+    private Double valorDeRepasse;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime dataAlteracaoStatus;
 }

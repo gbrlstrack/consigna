@@ -46,11 +46,11 @@ public class Peca {
     private LocalDateTime dataAlteracaoStatus;
 
     @ManyToOne
-    @JoinColumn(name = "fk_Lote_id", nullable = false)
+    @JoinColumn(name = "fk_Lote_id")
     private Lote lote;
 
     @ManyToOne
-    @JoinColumn(name = "fk_Categoria_id", nullable = false)
+    @JoinColumn(name = "fk_Categoria_id")
     private Categoria categoria;
 
     @Column

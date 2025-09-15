@@ -2,9 +2,7 @@ package com.consigna.consigna.services;
 
 import com.consigna.consigna.dtos.LoteRequestDTO;
 import com.consigna.consigna.dtos.LoteResponseDTO;
-import com.consigna.consigna.models.Consignatario;
-import com.consigna.consigna.models.Lote;
-import com.consigna.consigna.models.Usuario;
+import com.consigna.consigna.models.*;
 import com.consigna.consigna.repository.ConsignatarioRepository;
 import com.consigna.consigna.repository.LoteRepository;
 import com.consigna.consigna.repository.PecaRepository;
@@ -19,6 +17,7 @@ import static com.consigna.consigna.mapper.ObjectMapper.parseObjectsList;
 import static com.consigna.consigna.mapper.ObjectMapper.parseObject;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,24 +33,49 @@ public class LoteService {
     private final PecaRepository pecaRepository; // para buscar peças depois
 
     @Transactional
-    public LoteResponseDTO createLoteWithPecas(LoteRequestDTO lote) {
+    public LoteResponseDTO createLoteWithPecas(LoteRequestDTO loteDto) {
 
-        if (lote.getPecas() == null || lote.getPecas().isEmpty()) {
+        if (loteDto.getPecas() == null || loteDto.getPecas().isEmpty()) {
             throw new IllegalArgumentException("Lote precisa ter pelo menos uma peça.");
         }
 
-        Consignatario consignatario = consignatarioRepository.findById(lote.getConsignatarioId())
-                .orElseThrow(() -> new IllegalArgumentException("Consignatario não encontrado com o ID: " + lote.getConsignatarioId()));
+        Consignatario consignatario = consignatarioRepository.findById(loteDto.getConsignatarioId())
+                .orElseThrow(() -> new IllegalArgumentException("Consignatario não encontrado com o ID: " + loteDto.getConsignatarioId()));
 
-        Usuario usuario = usuarioRepository.findById(lote.getUsuarioId())
-                .orElseThrow(() -> new IllegalArgumentException("Usuario não encontrado com o ID: " + lote.getUsuarioId()));
+        Usuario usuario = usuarioRepository.findById(loteDto.getUsuarioId())
+                .orElseThrow(() -> new IllegalArgumentException("Usuario não encontrado com o ID: " + loteDto.getUsuarioId()));
 
-        var entity = parseObject(lote, Lote.class);
-        entity.setConsignatario(consignatario);
-        entity.setUsuario(usuario);
-        System.out.println(entity);
-        System.out.println("Lote: " + lote);
-        return parseObject(loteRepository.save(entity), LoteResponseDTO.class);
+        Lote loteEntity = new Lote();
+
+        loteEntity.setDataEntrada(loteDto.getDataEntrada());
+        loteEntity.setStatus(loteDto.getStatus());
+        loteEntity.setConsignatario(consignatario);
+        loteEntity.setUsuario(usuario);
+
+        List<Peca> pecas = loteDto.getPecas().stream()
+                .map(pecaDto -> {
+                    Peca peca = new Peca();
+
+                    peca.setNome(pecaDto.getDescricao());
+                    peca.setQuantidade(pecaDto.getQuantidade());
+                    peca.setValorMinimo(pecaDto.getValorMinimo());
+                    peca.setStatus(pecaDto.getStatus());
+                    peca.setValorDeVenda(pecaDto.getValorDeVenda());
+                    peca.setValorDeRepasse(pecaDto.getValorDeRepasse());
+                    peca.setDataAlteracaoStatus(pecaDto.getDataAlteracaoStatus());
+
+
+                    peca.setLote(loteEntity);
+
+                    return peca;
+                })
+                .collect(Collectors.toList());
+
+        loteEntity.setPecas(pecas);
+
+        Lote savedLote = loteRepository.save(loteEntity);
+
+        return parseObject(savedLote, LoteResponseDTO.class);
     }
 
     public LoteResponseDTO getById(Long id) {
@@ -69,5 +93,5 @@ public class LoteService {
                 .orElseThrow(() -> new ResourceNotFoundException("Lote not found"));
         loteRepository.delete(lote);
     }
-    
+
 }
