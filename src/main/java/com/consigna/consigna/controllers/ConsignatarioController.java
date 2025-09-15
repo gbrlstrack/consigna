@@ -35,7 +35,7 @@ public class ConsignatarioController {
         return consignatarioService.update(id, consignatario);
     }
 
-    @DeleteMapping(value = "/id")
+    @DeleteMapping(value = "/{id}")
     public void delete(@PathVariable Long id) {
         consignatarioService.delete(id);
     }

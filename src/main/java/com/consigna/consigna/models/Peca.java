@@ -39,6 +39,9 @@ public class Peca {
     @Column(name = "valor_de_venda")
     private Double valorDeVenda;
 
+    @Column(name = "valor_de_repasse")
+    private Double valorDeRepasse;
+
     @Column(name = "data_alteracao_status")
     private LocalDateTime dataAlteracaoStatus;
 

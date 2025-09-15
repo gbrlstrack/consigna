@@ -23,6 +23,7 @@ public class PecaDTO implements Serializable {
     private String status;
     private List<String> palavrasChave;
     private Double valorDeVenda;
+    private Double valorDRepasse;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime dataAlteracaoStatus;
 }

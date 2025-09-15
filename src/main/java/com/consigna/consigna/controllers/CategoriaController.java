@@ -36,7 +36,7 @@ public class CategoriaController {
         return categoriaService.update(id, categoria);
     }
 
-    @DeleteMapping(value = "/id")
+    @DeleteMapping(value = "/{id}")
     public void delete(@PathVariable Long id) {
         categoriaService.delete(id);
     }

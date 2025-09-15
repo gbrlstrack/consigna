@@ -2,6 +2,7 @@ package com.consigna.consigna.services;
 
 import com.consigna.consigna.dtos.PecaDTO;
 import com.consigna.consigna.dtos.PecaSaidaDTORequest;
+import com.consigna.consigna.enums.StatusPeca;
 import com.consigna.consigna.exceptions.ResourceNotFoundException;
 import com.consigna.consigna.repository.PecaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,18 @@ public class PecaService {
         return parseObjectsList(pecaRepository.findAll(), PecaDTO.class);
     }
 
-    public List<PecaSaidaDTORequest> pecaSaida(List<PecaSaidaDTORequest> request) {
+    public List<PecaSaidaDTORequest> pecaSaida(List<PecaSaidaDTORequest> request, String status) {
+        StatusPeca statusEnum = StatusPeca.valueOf(status);
+        request.forEach(peca -> {
+            var pecaFromDb = pecaRepository.findById(peca.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Peça not found"));
+            peca.setStatus(statusEnum.name());
+
+            if (statusEnum == StatusPeca.VENDIDO) {
+                pecaFromDb.setQuantidade(pecaFromDb.getQuantidade() - peca.getQuantidade());
+            }
+        });
+
         return request;
     }
 

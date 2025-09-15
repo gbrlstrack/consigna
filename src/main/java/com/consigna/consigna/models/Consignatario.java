@@ -17,14 +17,14 @@ public class Consignatario {
     @Column(name = "nome", length = 50)
     private String nome;
 
-    @Column(name = "tipo", length = 20)
-    private String tipo;
-
     @Column(name = "telefone", length = 14)
     private String telefone;
 
     @Column(name = "documento")
     private String documento;
+
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "tipo_documento")
     private String tipoDocumento;
@@ -45,14 +45,6 @@ public class Consignatario {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
     }
 
     public String getTelefone() {
@@ -79,14 +71,22 @@ public class Consignatario {
         this.tipoDocumento = tipoDocumento;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Consignatario that)) return false;
-        return Objects.equals(getId(), that.getId()) && Objects.equals(getNome(), that.getNome()) && Objects.equals(getTipo(), that.getTipo()) && Objects.equals(getTelefone(), that.getTelefone()) && Objects.equals(getDocumento(), that.getDocumento()) && Objects.equals(getTipoDocumento(), that.getTipoDocumento());
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getNome(), that.getNome()) && Objects.equals(getTelefone(), that.getTelefone()) && Objects.equals(getDocumento(), that.getDocumento()) && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getTipoDocumento(), that.getTipoDocumento());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getNome(), getTipo(), getTelefone(), getDocumento(), getTipoDocumento());
+        return Objects.hash(getId(), getNome(), getTelefone(), getDocumento(), getEmail(), getTipoDocumento());
     }
 }

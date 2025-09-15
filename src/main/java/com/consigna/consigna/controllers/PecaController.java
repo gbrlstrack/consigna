@@ -34,7 +34,7 @@ public class PecaController {
         return pecaService.update(id, peca);
     }
 
-    @DeleteMapping(value = "/id")
+    @DeleteMapping(value = "/{id}")
     public void delete(@PathVariable Long id) {
         pecaService.delete(id);
     }

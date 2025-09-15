@@ -1,10 +1,10 @@
 CREATE TABLE IF NOT EXISTS Consignatario (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(50) NOT NULL,
-    email VARCHAR(30) NOT NULL,
+    email VARCHAR(30),
     telefone VARCHAR(14) NOT NULL,
     tipo_documento VARCHAR(11),
-    documento VARCHAR(14)
+    documento VARCHAR(14) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Categoria (
@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS Peca (
     status VARCHAR(15),
     palavras_chave VARCHAR(50),
     valor_de_venda NUMERIC(10,2),
+    valor_de_repasse NUMERIC(10,2),
     data_alteracao_status DATE,
     quantidade INTEGER NOT NULL DEFAULT 1,
     fk_Lote_id INTEGER,
