@@ -9,6 +9,6 @@ import java.io.Serializable;
 public class UsuarioDTO implements Serializable {
     private Long id;
     private String nome;
-    private String usuario;
+    private String login;
     private String senha;
 }
