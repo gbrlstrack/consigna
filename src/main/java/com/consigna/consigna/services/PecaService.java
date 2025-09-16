@@ -1,6 +1,7 @@
 package com.consigna.consigna.services;
 
 import com.consigna.consigna.dtos.PecaDTO;
+import com.consigna.consigna.dtos.PecaDTORequest;
 import com.consigna.consigna.dtos.PecaSaidaDTORequest;
 import com.consigna.consigna.enums.StatusPeca;
 import com.consigna.consigna.exceptions.ResourceNotFoundException;
@@ -85,16 +86,18 @@ public class PecaService {
         return pecasAtualizadas;
     }
 
-    public PecaDTO update(Long id, PecaDTO dto) {
+    public PecaDTO update(Long id, PecaDTORequest dto) {
         var peca = pecaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Peça not found"));
 
+        var status = StatusPeca.valueOf(dto.getStatus());
+        peca.setStatus(status.name());
         peca.setDescricao(dto.getDescricao());
         peca.setValorDeRepasse(dto.getValorDeRepasse());
         peca.setValorMinimo(dto.getValorMinimo());
         peca.setQuantidade(dto.getQuantidade());
         peca.setValorDeVenda(dto.getValorDeVenda());
-
+        
         var updated = pecaRepository.save(peca);
         return parseObject(updated, PecaDTO.class);
     }

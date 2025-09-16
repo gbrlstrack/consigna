@@ -3,6 +3,7 @@ package com.consigna.consigna.controllers;
 
 import com.consigna.consigna.dtos.ConsignatarioDTO;
 import com.consigna.consigna.dtos.PecaDTO;
+import com.consigna.consigna.dtos.PecaDTORequest;
 import com.consigna.consigna.dtos.PecaSaidaDTORequest;
 import com.consigna.consigna.services.PecaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class PecaController {
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public PecaDTO update(@PathVariable Long id, @RequestBody PecaDTO peca) {
+    public PecaDTO update(@PathVariable Long id, @RequestBody PecaDTORequest peca) {
         return pecaService.update(id, peca);
     }
 
