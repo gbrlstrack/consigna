@@ -37,7 +37,7 @@ public class ConsignatarioService {
 
         entity.setNome(dto.getNome());
         entity.setDocumento(dto.getDocumento());
-        entity.setTipoDocumento(dto.getDocumento());
+        entity.setTipoDocumento(dto.getTipoDocumento());
         entity.setTelefone(dto.getTelefone());
 
         return parseObject(consignatarioRepository.save(entity), ConsignatarioDTO.class);
