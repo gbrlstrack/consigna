@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +41,7 @@ public class PecaService {
                     dto.setQuantidade(peca.getQuantidade());
                     dto.setValorMinimo(peca.getValorMinimo());
                     dto.setStatus(peca.getStatus());
-                    dto.setPalavrasChave(peca.getPalavrasChave()); // ⚠️ Verifique como você lida com a lista de String
+                    dto.setPalavrasChave(peca.getPalavrasChave());
                     dto.setValorDeVenda(peca.getValorDeVenda());
                     dto.setValorDeRepasse(peca.getValorDeRepasse());
                     dto.setDataAlteracaoStatus(peca.getDataAlteracaoStatus());
@@ -54,19 +56,34 @@ public class PecaService {
                 .collect(Collectors.toList());
     }
 
-    public List<PecaSaidaDTORequest> pecaSaida(List<PecaSaidaDTORequest> request, String status) {
-        StatusPeca statusEnum = StatusPeca.valueOf(status);
-        request.forEach(peca -> {
-            var pecaFromDb = pecaRepository.findById(peca.getId())
+    public List<PecaDTO> pecaSaida(List<PecaSaidaDTORequest> request) throws Exception {
+
+        List<PecaDTO> pecasAtualizadas = new ArrayList<>();
+
+        for (PecaSaidaDTORequest pecaSaidaDTO : request) {
+            StatusPeca statusEnum = StatusPeca.valueOf(pecaSaidaDTO.getStatus());
+            var pecaFromDb = pecaRepository.findById(pecaSaidaDTO.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Peça not found"));
-            peca.setStatus(statusEnum.name());
 
-            if (statusEnum == StatusPeca.VENDIDO) {
-                pecaFromDb.setQuantidade(pecaFromDb.getQuantidade() - peca.getQuantidade());
+            pecaFromDb.setStatus(statusEnum.name());
+            pecaFromDb.setDataAlteracaoStatus(LocalDateTime.now());
+
+            if (statusEnum == StatusPeca.VENDIDO || statusEnum == StatusPeca.RETIRADO_DONO) {
+                var canSubtract = pecaFromDb.getQuantidade() - pecaSaidaDTO.getQuantidade() >= 0;
+                var isLast = pecaFromDb.getQuantidade() - pecaSaidaDTO.getQuantidade() == 0;
+                if (!canSubtract) {
+                   throw new Exception("Não há peças suficientes");
+                }
+                pecaFromDb.setQuantidade(pecaFromDb.getQuantidade() - pecaSaidaDTO.getQuantidade());
+                if (isLast) pecaFromDb.setStatus(StatusPeca.INATIVO.name());
             }
-        });
 
-        return request;
+            Peca updatedPeca = pecaRepository.save(pecaFromDb);
+            PecaDTO updatedPecaDto = parseObject(updatedPeca, PecaDTO.class);
+            pecasAtualizadas.add(updatedPecaDto);
+        }
+
+        return pecasAtualizadas;
     }
 
     public PecaDTO update(Long id, PecaDTO dto) {

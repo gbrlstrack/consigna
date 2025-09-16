@@ -3,6 +3,7 @@ package com.consigna.consigna.controllers;
 
 import com.consigna.consigna.dtos.ConsignatarioDTO;
 import com.consigna.consigna.dtos.PecaDTO;
+import com.consigna.consigna.dtos.PecaSaidaDTORequest;
 import com.consigna.consigna.services.PecaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -39,5 +40,10 @@ public class PecaController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         pecaService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(value = "/saidas", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public List<PecaDTO> saida(@RequestBody List<PecaSaidaDTORequest> listaSaidas) throws Exception {
+        return pecaService.pecaSaida(listaSaidas);
     }
 }
