@@ -72,15 +72,14 @@ public class PecaService {
                 var canSubtract = pecaFromDb.getQuantidade() - pecaSaidaDTO.getQuantidade() >= 0;
                 var isLast = pecaFromDb.getQuantidade() - pecaSaidaDTO.getQuantidade() == 0;
                 if (!canSubtract) {
-                   throw new Exception("Não há peças suficientes");
+                    throw new Exception("Não há peças suficientes");
                 }
                 pecaFromDb.setQuantidade(pecaFromDb.getQuantidade() - pecaSaidaDTO.getQuantidade());
                 if (isLast) pecaFromDb.setStatus(StatusPeca.INATIVO.name());
             }
 
             Peca updatedPeca = pecaRepository.save(pecaFromDb);
-            PecaDTO updatedPecaDto = parseObject(updatedPeca, PecaDTO.class);
-            pecasAtualizadas.add(updatedPecaDto);
+            pecasAtualizadas.add(parseObject(updatedPeca, PecaDTO.class));
         }
 
         return pecasAtualizadas;
