@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS Consignatario (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(50) NOT NULL,
-    email VARCHAR(30),
+    email VARCHAR(50),
     telefone VARCHAR(14),
     tipo_documento VARCHAR(11),
     documento VARCHAR(14) NOT NULL

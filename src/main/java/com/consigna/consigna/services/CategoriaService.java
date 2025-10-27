@@ -5,6 +5,8 @@ import com.consigna.consigna.exceptions.ResourceNotFoundException;
 import com.consigna.consigna.models.Categoria;
 import com.consigna.consigna.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,8 +29,8 @@ public class CategoriaService {
         return parseObject(categoriaRepository.findById(id), CategoriaDTO.class);
     }
 
-    public List<CategoriaDTO> getAll() {
-        return parseObjectsList(categoriaRepository.findAll(), CategoriaDTO.class);
+    public Page<CategoriaDTO> getAll(Pageable pageable) {
+        return categoriaRepository.findAll(pageable).map(categoria -> parseObject(categoria, CategoriaDTO.class));
     }
 
     public CategoriaDTO update(Long id, CategoriaDTO dto) {

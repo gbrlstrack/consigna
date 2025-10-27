@@ -10,6 +10,8 @@ import com.consigna.consigna.repository.PecaRepository;
 import com.consigna.consigna.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.consigna.consigna.exceptions.ResourceNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,8 +86,8 @@ public class LoteService {
         return parseObject(lote, LoteResponseDTO.class);
     }
 
-    public List<LoteResponseDTO> getAll() {
-        return parseObjectsList(loteRepository.findAllWithPecas(), LoteResponseDTO.class);
+    public Page<LoteResponseDTO> getAll(Pageable pageable) {
+        return loteRepository.findAllWithPecas(pageable).map(lote -> parseObject(lote, LoteResponseDTO.class));
     }
 
     @Transactional

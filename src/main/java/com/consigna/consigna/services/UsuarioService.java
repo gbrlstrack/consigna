@@ -4,6 +4,8 @@ import com.consigna.consigna.dtos.UsuarioDTO;
 import com.consigna.consigna.models.Usuario;
 import com.consigna.consigna.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,8 +29,8 @@ public class UsuarioService {
         return parseObject(usuario, UsuarioDTO.class);
     }
 
-    public List<UsuarioDTO> getAll() {
-        return parseObjectsList(usuarioRepository.findAll(), UsuarioDTO.class);
+    public Page<UsuarioDTO> getAll(Pageable pageable) {
+        return usuarioRepository.findAll(pageable).map(user -> parseObject(user, UsuarioDTO.class));
     }
 
     public UsuarioDTO update(Long id, UsuarioDTO usuarioDTO) {

@@ -5,6 +5,8 @@ import com.consigna.consigna.exceptions.ResourceNotFoundException;
 import com.consigna.consigna.models.Consignatario;
 import com.consigna.consigna.repository.ConsignatarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,17 +25,16 @@ public class ConsignatarioService {
         return parseObject(consignatarioRepository.save(entity), ConsignatarioDTO.class);
     }
 
-    public ConsignatarioDTO getById(Long id){
+    public ConsignatarioDTO getById(Long id) {
         return parseObject(consignatarioRepository.findById(id), ConsignatarioDTO.class);
     }
 
-    public List<ConsignatarioDTO> getAll(){
-        return parseObjectsList(consignatarioRepository.findAll(), ConsignatarioDTO.class);
+    public Page<ConsignatarioDTO> getAll(Pageable pageable) {
+        return consignatarioRepository.findAll(pageable).map(consignatario -> parseObject(consignatario, ConsignatarioDTO.class));
     }
 
     public ConsignatarioDTO update(Long id, ConsignatarioDTO dto) {
-        var entity = consignatarioRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Consignatario not found with id " + id));
+        var entity = consignatarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Consignatario not found with id " + id));
 
         entity.setNome(dto.getNome());
         entity.setDocumento(dto.getDocumento());
@@ -44,8 +45,7 @@ public class ConsignatarioService {
     }
 
     public void delete(Long id) {
-        var entity = consignatarioRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Consignatario not found with id " + id));
+        var entity = consignatarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Consignatario not found with id " + id));
 
         consignatarioRepository.delete(entity);
     }

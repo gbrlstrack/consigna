@@ -8,6 +8,8 @@ import com.consigna.consigna.exceptions.ResourceNotFoundException;
 import com.consigna.consigna.models.Peca;
 import com.consigna.consigna.repository.PecaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,11 +33,10 @@ public class PecaService {
     }
 
     @Transactional
-    public List<PecaDTO> getAll() {
-        List<Peca> pecas = pecaRepository.findAll();
+    public Page<PecaDTO> getAll(Pageable pageable) {
+        Page<Peca> pecasPage = pecaRepository.findAll(pageable);
 
-        return pecas.stream()
-                .map(peca -> {
+        return pecasPage.map(peca -> {
                     PecaDTO dto = new PecaDTO();
                     dto.setId(peca.getId());
                     dto.setDescricao(peca.getDescricao());
@@ -53,8 +54,7 @@ public class PecaService {
                     }
 
                     return dto;
-                })
-                .collect(Collectors.toList());
+                });
     }
 
     public List<PecaDTO> pecaSaida(List<PecaSaidaDTORequest> request) throws Exception {

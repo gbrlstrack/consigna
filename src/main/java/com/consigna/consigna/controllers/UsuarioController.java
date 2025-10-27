@@ -4,6 +4,9 @@ import com.consigna.consigna.dtos.PecaDTO;
 import com.consigna.consigna.dtos.UsuarioDTO;
 import com.consigna.consigna.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +31,8 @@ public class UsuarioController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<UsuarioDTO> getAll() {
-        return usuarioService.getAll();
+    public Page<UsuarioDTO> getAll(@PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
+        return usuarioService.getAll(pageable);
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -4,6 +4,9 @@ import com.consigna.consigna.dtos.LoteRequestDTO;
 import com.consigna.consigna.dtos.LoteResponseDTO;
 import com.consigna.consigna.services.LoteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +30,8 @@ public class LoteController {
     ;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<LoteResponseDTO> findAll() {
-        return loteService.getAll();
+    public Page<LoteResponseDTO> findAll(@PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
+        return loteService.getAll(pageable);
     }
 
     ;
