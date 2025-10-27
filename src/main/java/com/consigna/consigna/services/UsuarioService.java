@@ -6,6 +6,7 @@ import com.consigna.consigna.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +20,13 @@ public class UsuarioService {
     @Autowired
     UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public UsuarioDTO create(UsuarioDTO usuario) {
+        String encodedPassword = passwordEncoder.encode(usuario.getSenha());
         var entity = parseObject(usuario, Usuario.class);
+        entity.setSenha(encodedPassword);
         return parseObject(usuarioRepository.save(entity), UsuarioDTO.class);
     }
 

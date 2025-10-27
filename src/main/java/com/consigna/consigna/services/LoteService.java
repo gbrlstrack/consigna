@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import com.consigna.consigna.exceptions.ResourceNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,15 +48,16 @@ public class LoteService {
         Consignatario consignatario = consignatarioRepository.findById(loteDto.getConsignatarioId())
                 .orElseThrow(() -> new IllegalArgumentException("Consignatario não encontrado com o ID: " + loteDto.getConsignatarioId()));
 
-        Usuario usuario = usuarioRepository.findById(loteDto.getUsuarioId())
-                .orElseThrow(() -> new IllegalArgumentException("Usuario não encontrado com o ID: " + loteDto.getUsuarioId()));
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Usuario loggedUser = usuarioRepository.findByLogin(userDetails.getUsername())
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário '" + userDetails.getUsername() + "' não encontrado no banco de dados."));
 
         Lote loteEntity = new Lote();
 
         loteEntity.setStatus(StatusPeca.ATIVO.name());
         loteEntity.setDataEntrada(LocalDateTime.now());
         loteEntity.setConsignatario(consignatario);
-        loteEntity.setUsuario(usuario);
+        loteEntity.setUsuario(loggedUser);
 
         List<Peca> pecas = loteDto.getPecas().stream()
                 .map(pecaDto -> {

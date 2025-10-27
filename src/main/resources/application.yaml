@@ -23,3 +23,9 @@ logging:
   level:
     com.consigna.consigna: INFO
     org.hibernate.SQL: DEBUG
+
+# Configurações para JSON Web Token (JWT)
+jwt:
+  # EM PRODUÇÃO, use uma variável de ambiente ou um cofre de segredos (Vault)
+  secret: "uma-chave-secreta-super-longa-e-segura-com-pelo-menos-256-bits-de-entropia"
+  expiration: 3600000 # Tempo de expiração em milissegundos (1 hora)
