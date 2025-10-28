@@ -97,6 +97,7 @@ public class PecaService {
         peca.setValorMinimo(dto.getValorMinimo());
         peca.setQuantidade(dto.getQuantidade());
         peca.setValorDeVenda(dto.getValorDeVenda());
+        peca.setDataAlteracaoStatus(LocalDateTime.now());
         
         var updated = pecaRepository.save(peca);
         return parseObject(updated, PecaDTO.class);
