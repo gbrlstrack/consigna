@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS Peca (
     descricao VARCHAR(50) NOT NULL,
     valor_minimo NUMERIC(10,2),
     status VARCHAR(15),
+    qr_code VARCHAR(255),
     palavras_chave VARCHAR(50),
     valor_de_venda NUMERIC(10,2) NOT NULL,
     valor_de_repasse NUMERIC(10,2),

@@ -8,6 +8,7 @@ import com.consigna.consigna.repository.ConsignatarioRepository;
 import com.consigna.consigna.repository.LoteRepository;
 import com.consigna.consigna.repository.PecaRepository;
 import com.consigna.consigna.repository.UsuarioRepository;
+import com.google.zxing.WriterException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,11 +19,14 @@ import org.springframework.stereotype.Service;
 import com.consigna.consigna.exceptions.ResourceNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+
 import static com.consigna.consigna.mapper.ObjectMapper.parseObjectsList;
 import static com.consigna.consigna.mapper.ObjectMapper.parseObject;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +39,8 @@ public class LoteService {
     ConsignatarioRepository consignatarioRepository;
     @Autowired
     UsuarioRepository usuarioRepository;
+    @Autowired
+    QRCodeService qrCodeService;
 
     private final PecaRepository pecaRepository; // para buscar peças depois
 
@@ -70,6 +76,12 @@ public class LoteService {
                     peca.setValorDeVenda(pecaDto.getValorDeVenda());
                     peca.setValorDeRepasse(pecaDto.getValorDeRepasse());
                     peca.setDataAlteracaoStatus(pecaDto.getDataAlteracaoStatus());
+
+                    try {
+                        peca.setQrCode(qrCodeService.generateQRCode(UUID.randomUUID().toString()));
+                    } catch (WriterException | IOException e) {
+                        throw new RuntimeException(e);
+                    }
 
 
                     peca.setLote(loteEntity);
