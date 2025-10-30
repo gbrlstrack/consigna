@@ -53,7 +53,7 @@ public class Peca {
     @Column
     private Integer quantidade;
 
-    @Column(name = "qr_code")
+    @Column(name = "qr_code", columnDefinition = "TEXT")
     private String qrCode;
 
 }

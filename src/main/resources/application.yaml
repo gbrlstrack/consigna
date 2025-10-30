@@ -19,6 +19,14 @@ spring:
     enabled: true
     baseline-on-migrate: true
     locations: classpath:db/migration
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: email@email.com
+    password: "KEY"
+    properties:
+        mail.smtp.auth: true
+        mail.smtp.starttls.enable: true
 logging:
   level:
     com.consigna.consigna: INFO
@@ -28,4 +36,4 @@ logging:
 jwt:
   # EM PRODUÇÃO, use uma variável de ambiente ou um cofre de segredos (Vault)
   secret: "uma-chave-secreta-super-longa-e-segura-com-pelo-menos-256-bits-de-entropia"
-  expiration: 3600000 # Tempo de expiração em milissegundos (1 hora)
+  expiration: 7200000 # Tempo de expiração em milissegundos (1 hora)
