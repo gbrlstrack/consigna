@@ -10,8 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/consignatario")
 public class ConsignatarioController {
@@ -30,8 +28,11 @@ public class ConsignatarioController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Page<ConsignatarioDTO> getAll(@PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
-        return consignatarioService.getAll(pageable);
+    public Page<ConsignatarioDTO> getAll(
+            @RequestParam(required = false) String searchTerm,
+            @PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable
+    ) {
+        return consignatarioService.getAll(searchTerm, pageable);
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

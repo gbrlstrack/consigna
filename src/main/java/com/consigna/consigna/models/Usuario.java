@@ -27,11 +27,14 @@ public class Usuario implements UserDetails {
     @Column(name = "nome", length = 50)
     private String nome;
 
-    @Column(name = "login", length = 20)
+    @Column(name = "login", length = 20, unique = true)
     private String login;
 
     @Column(name = "senha")
     private String senha;
+
+    @Column(name = "email", unique = true)
+    private String email;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

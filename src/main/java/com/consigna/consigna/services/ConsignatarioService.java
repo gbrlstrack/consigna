@@ -9,8 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 import static com.consigna.consigna.mapper.ObjectMapper.parseObject;
 import static com.consigna.consigna.mapper.ObjectMapper.parseObjectsList;
 
@@ -18,7 +16,7 @@ import static com.consigna.consigna.mapper.ObjectMapper.parseObjectsList;
 public class ConsignatarioService {
 
     @Autowired
-    ConsignatarioRepository consignatarioRepository;
+   ConsignatarioRepository consignatarioRepository;
 
     public ConsignatarioDTO create(ConsignatarioDTO consignatario) {
         var entity = parseObject(consignatario, Consignatario.class);
@@ -29,8 +27,14 @@ public class ConsignatarioService {
         return parseObject(consignatarioRepository.findById(id), ConsignatarioDTO.class);
     }
 
-    public Page<ConsignatarioDTO> getAll(Pageable pageable) {
-        return consignatarioRepository.findAll(pageable).map(consignatario -> parseObject(consignatario, ConsignatarioDTO.class));
+    public Page<ConsignatarioDTO> getAll(String searchTerm, Pageable pageable) {
+        Page<Consignatario> consignatariosPage;
+        if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+            consignatariosPage = consignatarioRepository.findByNomeContainingIgnoreCaseOrDocumentoContainingIgnoreCase(searchTerm, searchTerm, pageable);
+        } else {
+            consignatariosPage = consignatarioRepository.findAll(pageable);
+        }
+        return consignatariosPage.map(consignatario -> parseObject(consignatario, ConsignatarioDTO.class));
     }
 
     public ConsignatarioDTO update(Long id, ConsignatarioDTO dto) {

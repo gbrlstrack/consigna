@@ -46,6 +46,7 @@ public class UsuarioService {
         usuario.setNome(usuarioDTO.getNome());
         usuario.setLogin(usuarioDTO.getLogin());
         usuario.setSenha(usuarioDTO.getSenha());
+        usuario.setEmail(usuarioDTO.getEmail());
 
         return parseObject(usuarioRepository.save(usuario), UsuarioDTO.class);
     }
