@@ -40,20 +40,19 @@ public class UsuarioService {
     }
 
     public UsuarioDTO update(Long id, UsuarioDTO usuarioDTO) {
-        var usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com id: " + id));
+        var usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado com id: " + id));
 
         usuario.setNome(usuarioDTO.getNome());
         usuario.setLogin(usuarioDTO.getLogin());
-        usuario.setSenha(usuarioDTO.getSenha());
         usuario.setEmail(usuarioDTO.getEmail());
+        if (usuarioDTO.getSenha() != null) usuario.setSenha(passwordEncoder.encode(usuarioDTO.getSenha()));
+
 
         return parseObject(usuarioRepository.save(usuario), UsuarioDTO.class);
     }
 
     public void delete(Long id) {
-        var usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com id: " + id));
+        var usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado com id: " + id));
         usuarioRepository.delete(usuario);
     }
 }
