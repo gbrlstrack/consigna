@@ -6,26 +6,37 @@ import com.consigna.consigna.dtos.PecaSaidaDTORequest;
 import com.consigna.consigna.enums.StatusPeca;
 import com.consigna.consigna.exceptions.ResourceNotFoundException;
 import com.consigna.consigna.models.Peca;
+import com.consigna.consigna.models.Saida;
+import com.consigna.consigna.models.Usuario;
 import com.consigna.consigna.repository.PecaRepository;
+import com.consigna.consigna.repository.SaidaRepository;
+import com.consigna.consigna.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.consigna.consigna.mapper.ObjectMapper.parseObject;
-import static com.consigna.consigna.mapper.ObjectMapper.parseObjectsList;
 
 @Service
 public class PecaService {
 
     @Autowired
     PecaRepository pecaRepository;
+
+    @Autowired
+    SaidaRepository saidaRepository;
+
+    @Autowired
+    UsuarioRepository usuarioRepository;
 
     public PecaDTO getById(Long id) {
         var peca = pecaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Peça not found"));
@@ -37,36 +48,37 @@ public class PecaService {
         Page<Peca> pecasPage = pecaRepository.findAll(pageable);
 
         return pecasPage.map(peca -> {
-                    PecaDTO dto = new PecaDTO();
-                    dto.setId(peca.getId());
-                    dto.setDescricao(peca.getDescricao());
-                    dto.setQuantidade(peca.getQuantidade());
-                    dto.setValorMinimo(peca.getValorMinimo());
-                    dto.setStatus(peca.getStatus());
-                    dto.setPalavrasChave(peca.getPalavrasChave());
-                    dto.setValorDeVenda(peca.getValorDeVenda());
-                    dto.setValorDeRepasse(peca.getValorDeRepasse());
-                    dto.setDataAlteracaoStatus(peca.getDataAlteracaoStatus());
+            PecaDTO dto = new PecaDTO();
+            dto.setId(peca.getId());
+            dto.setDescricao(peca.getDescricao());
+            dto.setQuantidade(peca.getQuantidade());
+            dto.setValorMinimo(peca.getValorMinimo());
+            dto.setStatus(peca.getStatus());
+            dto.setPalavrasChave(peca.getPalavrasChave());
+            dto.setValorDeVenda(peca.getValorDeVenda());
+            dto.setValorDeRepasse(peca.getValorDeRepasse());
+            dto.setDataAlteracaoStatus(peca.getDataAlteracaoStatus());
 
-                    // 💡 Pega o ID do lote e o associa à DTO
-                    if (peca.getLote() != null) {
-                        dto.setLoteId(peca.getLote().getId());
-                    }
+            if (peca.getLote() != null) {
+                dto.setLoteId(peca.getLote().getId());
+            }
 
-                    return dto;
-                });
+            return dto;
+        });
     }
 
+    @Transactional
     public List<PecaDTO> pecaSaida(List<PecaSaidaDTORequest> request) throws Exception {
 
         List<PecaDTO> pecasAtualizadas = new ArrayList<>();
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Usuario loggedUser = usuarioRepository.findByLogin(userDetails.getUsername())
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário '" + userDetails.getUsername() + "' não encontrado no banco de dados."));
 
         for (PecaSaidaDTORequest pecaSaidaDTO : request) {
             StatusPeca statusEnum = StatusPeca.valueOf(pecaSaidaDTO.getStatus());
             var pecaFromDb = pecaRepository.findById(pecaSaidaDTO.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Peça not found"));
-
-            pecaFromDb.setStatus(statusEnum.name());
             pecaFromDb.setDataAlteracaoStatus(LocalDateTime.now());
 
             if (statusEnum == StatusPeca.VENDIDO || statusEnum == StatusPeca.RETIRADO_DONO) {
@@ -77,6 +89,14 @@ public class PecaService {
                 }
                 pecaFromDb.setQuantidade(pecaFromDb.getQuantidade() - pecaSaidaDTO.getQuantidade());
                 if (isLast) pecaFromDb.setStatus(StatusPeca.INATIVO.name());
+
+                Saida saida = new Saida();
+                saida.setDataSaida(LocalDate.now());
+                saida.setTipo(statusEnum.name());
+                saida.setQuantidade(pecaSaidaDTO.getQuantidade());
+                saida.setPeca(pecaFromDb);
+                saida.setUsuario(loggedUser);
+                saidaRepository.save(saida);
             }
 
             Peca updatedPeca = pecaRepository.save(pecaFromDb);
@@ -98,7 +118,7 @@ public class PecaService {
         peca.setQuantidade(dto.getQuantidade());
         peca.setValorDeVenda(dto.getValorDeVenda());
         peca.setDataAlteracaoStatus(LocalDateTime.now());
-        
+
         var updated = pecaRepository.save(peca);
         return parseObject(updated, PecaDTO.class);
     }
