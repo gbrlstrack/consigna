@@ -21,7 +21,7 @@ public class CategoriaController {
     CategoriaService categoriaService;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public CategoriaDTO create(CategoriaDTO categoria) {
+    public CategoriaDTO create(@RequestBody CategoriaDTO categoria) {
         return categoriaService.create(categoria);
     }
 
