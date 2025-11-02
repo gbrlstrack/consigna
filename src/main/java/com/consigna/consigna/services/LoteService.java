@@ -101,8 +101,14 @@ public class LoteService {
         return parseObject(lote, LoteResponseDTO.class);
     }
 
-    public Page<LoteResponseDTO> getAll(Pageable pageable) {
-        return loteRepository.findAllWithPecas(pageable).map(lote -> parseObject(lote, LoteResponseDTO.class));
+    public Page<LoteResponseDTO> getAll(String nomeConsignatario, Pageable pageable) {
+        Page<Lote> lotesPage;
+        if (nomeConsignatario != null && !nomeConsignatario.trim().isEmpty()) {
+            lotesPage = loteRepository.findByConsignatarioNomeContainingIgnoreCase(nomeConsignatario, pageable);
+        } else {
+            lotesPage = loteRepository.findAllWithPecas(pageable);
+        }
+        return lotesPage.map(lote -> parseObject(lote, LoteResponseDTO.class));
     }
 
     @Transactional

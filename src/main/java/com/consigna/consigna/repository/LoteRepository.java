@@ -20,4 +20,8 @@ public interface LoteRepository extends JpaRepository<Lote, Long> {
     Page<Lote> findAllWithPecas(Pageable pageable);
 
     Optional<Lote> findFirstByOrderByDataEntradaDesc();
+
+    @Query(value = "SELECT DISTINCT l FROM Lote l LEFT JOIN FETCH l.pecas p JOIN l.consignatario c WHERE lower(c.nome) LIKE lower(concat('%', :nomeConsignatario, '%'))",
+            countQuery = "SELECT COUNT(l) FROM Lote l JOIN l.consignatario c WHERE lower(c.nome) LIKE lower(concat('%', :nomeConsignatario, '%'))")
+    Page<Lote> findByConsignatarioNomeContainingIgnoreCase(@Param("nomeConsignatario") String nomeConsignatario, Pageable pageable);
 }

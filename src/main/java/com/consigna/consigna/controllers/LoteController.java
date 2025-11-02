@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/lote")
+@RequestMapping("/lote") // Sugestão: Usar plural para endpoints de coleção
 public class LoteController {
 
     @Autowired
@@ -27,14 +27,12 @@ public class LoteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    ;
-
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Page<LoteResponseDTO> findAll(@PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
-        return loteService.getAll(pageable);
+    public Page<LoteResponseDTO> findAll(
+            @RequestParam(name = "consignatario", required = false) String nomeConsignatario,
+            @PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
+        return loteService.getAll(nomeConsignatario, pageable);
     }
-
-    ;
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public LoteResponseDTO findById(@PathVariable("id") Long id) {
