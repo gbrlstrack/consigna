@@ -44,27 +44,15 @@ public class PecaService {
     }
 
     @Transactional
-    public Page<PecaDTO> getAll(Pageable pageable) {
-        Page<Peca> pecasPage = pecaRepository.findAll(pageable);
-
-        return pecasPage.map(peca -> {
-            PecaDTO dto = new PecaDTO();
-            dto.setId(peca.getId());
-            dto.setDescricao(peca.getDescricao());
-            dto.setQuantidade(peca.getQuantidade());
-            dto.setValorMinimo(peca.getValorMinimo());
-            dto.setStatus(peca.getStatus());
-            dto.setPalavrasChave(peca.getPalavrasChave());
-            dto.setValorDeVenda(peca.getValorDeVenda());
-            dto.setValorDeRepasse(peca.getValorDeRepasse());
-            dto.setDataAlteracaoStatus(peca.getDataAlteracaoStatus());
-
-            if (peca.getLote() != null) {
-                dto.setLoteId(peca.getLote().getId());
-            }
-
-            return dto;
-        });
+    public Page<PecaDTO> getAll(String descricao, Pageable pageable) {
+        Page<Peca> pecasPage;
+        if (descricao != null && !descricao.trim().isEmpty()) {
+            pecasPage = pecaRepository.findByDescricaoContainingIgnoreCase(descricao, pageable);
+        } else {
+            pecasPage = pecaRepository.findAll(pageable);
+        }
+        // Refatorado para usar o ObjectMapper, deixando o código mais limpo
+        return pecasPage.map(peca -> parseObject(peca, PecaDTO.class));
     }
 
     @Transactional

@@ -17,15 +17,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/peca")
+@RequestMapping("/pecas") // Sugestão: Usar plural para endpoints de coleção
 public class PecaController {
 
     @Autowired
     PecaService pecaService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Page<PecaDTO> findAll(@PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
-        return pecaService.getAll(pageable);
+    public Page<PecaDTO> findAll(
+            @RequestParam(name = "descricao", required = false) String descricao,
+            @PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
+        return pecaService.getAll(descricao, pageable);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
