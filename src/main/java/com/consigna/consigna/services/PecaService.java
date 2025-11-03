@@ -63,11 +63,12 @@ public class PecaService {
 
         for (PecaSaidaDTORequest pecaSaidaDTO : request) {
             StatusPeca statusEnum = StatusPeca.valueOf(pecaSaidaDTO.getStatus());
+            System.out.println(statusEnum);
             var pecaFromDb = pecaRepository.findById(pecaSaidaDTO.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Peça not found"));
             pecaFromDb.setDataAlteracaoStatus(LocalDateTime.now());
 
-            if (statusEnum == StatusPeca.VENDIDO || statusEnum == StatusPeca.RETIRADO_DONO) {
+            if (statusEnum == StatusPeca.VENDIDO || statusEnum == StatusPeca.DEVOLVIDO_DONO) {
                 var canSubtract = pecaFromDb.getQuantidade() - pecaSaidaDTO.getQuantidade() >= 0;
                 var isLast = pecaFromDb.getQuantidade() - pecaSaidaDTO.getQuantidade() == 0;
                 if (!canSubtract) {
