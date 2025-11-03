@@ -44,25 +44,30 @@ public class PdfService {
             document.add(new Paragraph("Itens do Lote", fontSubtitle));
             document.add(Chunk.NEWLINE);
 
-            PdfPTable table = new PdfPTable(3); // 3 colunas
+            PdfPTable table = new PdfPTable(4); // 3 colunas
             table.setWidthPercentage(100);
-            table.setWidths(new float[]{1f, 4f, 2f}); // Proporção das colunas
+            table.setWidths(new float[]{1f, 4f, 1f, 2f}); // Proporção das colunas
 
             // Cabeçalho da tabela
             PdfPCell headerCell1 = new PdfPCell(new Paragraph("ID", fontHeader));
             PdfPCell headerCell2 = new PdfPCell(new Paragraph("Descrição", fontHeader));
-            PdfPCell headerCell3 = new PdfPCell(new Paragraph("Valor", fontHeader));
+            PdfPCell headerCell3 = new PdfPCell(new Paragraph("Quantidade", fontHeader));
+            PdfPCell headerCell4 = new PdfPCell(new Paragraph("Valor", fontHeader));
             headerCell3.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            headerCell4.setHorizontalAlignment(Element.ALIGN_RIGHT);
 
             table.addCell(headerCell1);
             table.addCell(headerCell2);
             table.addCell(headerCell3);
+            table.addCell(headerCell4);
 
             // Adiciona as peças na tabela
             for (Peca peca : lote.getPecas()) {
                 table.addCell(new Paragraph(String.valueOf(peca.getId()), fontCell));
                 table.addCell(new Paragraph(peca.getDescricao(), fontCell));
-
+                PdfPCell qtdCell = new PdfPCell(new Paragraph(peca.getQuantidade().toString(), fontCell));
+                qtdCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                table.addCell(qtdCell);
                 // Formata o valor como moeda (R$)
                 NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
                 String valorFormatado = peca.getValorMinimo() != null ? currencyFormat.format(peca.getValorMinimo()) : "N/A";
