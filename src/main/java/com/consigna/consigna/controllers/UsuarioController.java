@@ -1,9 +1,9 @@
 package com.consigna.consigna.controllers;
 
-import com.consigna.consigna.dtos.PecaDTO;
+import com.consigna.consigna.dtos.EsqueciSenhaRequestDTO;
 import com.consigna.consigna.dtos.UsuarioDTO;
 import com.consigna.consigna.services.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -11,19 +11,18 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/usuario")
+@RequiredArgsConstructor
 public class UsuarioController {
 
-    @Autowired
-    UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
 
     @PostMapping("/esqueci-senha")
-    public ResponseEntity<Void> esqueciSenha(@RequestBody Map<String, String> payload) {
-        usuarioService.solicitarRedefinicaoSenha(payload.get("email"));
+    public ResponseEntity<Void> esqueciSenha(@RequestBody EsqueciSenhaRequestDTO payload) {
+        usuarioService.solicitarRedefinicaoSenha(payload.getLogin());
         return ResponseEntity.ok().build();
     }
 
@@ -53,7 +52,7 @@ public class UsuarioController {
         return usuarioService.update(id, usuario);
     }
 
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         usuarioService.delete(id);
         return ResponseEntity.noContent().build();

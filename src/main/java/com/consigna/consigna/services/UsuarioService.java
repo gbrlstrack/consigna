@@ -1,6 +1,7 @@
 package com.consigna.consigna.services;
 
 import com.consigna.consigna.dtos.UsuarioDTO;
+import com.consigna.consigna.exceptions.ResourceNotFoundException;
 import com.consigna.consigna.models.Usuario;
 import com.consigna.consigna.repository.UsuarioRepository;
 import com.github.dozermapper.core.Mapper;
@@ -26,8 +27,8 @@ public class UsuarioService {
     private final JavaMailSender mailSender;
 
 
-    public void solicitarRedefinicaoSenha(String email) {
-        var usuario = usuarioRepository.findByLogin(email).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    public void solicitarRedefinicaoSenha(String login) {
+        var usuario = usuarioRepository.findByLogin(login).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         String token = UUID.randomUUID().toString();
         usuario.setResetPasswordToken(token);
@@ -69,8 +70,9 @@ public class UsuarioService {
     }
 
     public UsuarioDTO getById(Long id) {
-        var usuario = usuarioRepository.findById(id);
-        return mapper.map(usuario, UsuarioDTO.class);
+        var entity = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
+        return mapper.map(entity, UsuarioDTO.class);
     }
 
     public Page<UsuarioDTO> getAll(Pageable pageable) {
@@ -78,7 +80,7 @@ public class UsuarioService {
     }
 
     public UsuarioDTO update(Long id, UsuarioDTO usuarioDTO) {
-        var usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado com id: " + id));
+        var usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
 
         usuario.setNome(usuarioDTO.getNome());
         usuario.setLogin(usuarioDTO.getLogin());
@@ -91,7 +93,7 @@ public class UsuarioService {
     }
 
     public void delete(Long id) {
-        var usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado com id: " + id));
+        var usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
         usuarioRepository.delete(usuario);
     }
 }
