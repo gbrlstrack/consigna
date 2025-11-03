@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +36,13 @@ public class Usuario implements UserDetails {
 
     @Column(name = "email", unique = true)
     private String email;
+
+    @Column(name = "reset_password_token")
+    private String resetPasswordToken;
+
+    @Column(name = "reset_password_token_expiry_date")
+    private LocalDateTime resetPasswordTokenExpiryDate;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

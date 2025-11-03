@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/usuario")
@@ -19,6 +20,18 @@ public class UsuarioController {
 
     @Autowired
     UsuarioService usuarioService;
+
+    @PostMapping("/esqueci-senha")
+    public ResponseEntity<Void> esqueciSenha(@RequestBody Map<String, String> payload) {
+        usuarioService.solicitarRedefinicaoSenha(payload.get("email"));
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/redefinir-senha")
+    public ResponseEntity<Void> redefinirSenha(@RequestBody Map<String, String> payload) {
+        usuarioService.redefinirSenha(payload.get("token"), payload.get("novaSenha"));
+        return ResponseEntity.ok().build();
+    }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public UsuarioDTO createUser(@RequestBody UsuarioDTO usuario) {
