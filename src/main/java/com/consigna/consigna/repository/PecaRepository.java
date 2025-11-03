@@ -1,5 +1,6 @@
 package com.consigna.consigna.repository;
 
+import com.consigna.consigna.enums.StatusPeca;
 import com.consigna.consigna.models.Peca;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,4 +13,6 @@ public interface PecaRepository extends JpaRepository<Peca, Long> {
     Page<Peca> findByDescricaoContainingIgnoreCaseAndStatusNot(String descricao, String status, Pageable pageable);
 
     Page<Peca> findAllByStatusNot(String status, Pageable pageable);
+
+    long countByLoteIdAndStatus(Long loteId, String status);
 }

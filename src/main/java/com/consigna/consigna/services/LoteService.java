@@ -117,4 +117,15 @@ public class LoteService {
         loteRepository.delete(lote);
     }
 
+    public void verificarEAtualizarStatusLote(Peca peca) {
+        Lote lote = peca.getLote();
+        if (lote == null) return; // Se a peça não pertence a um lote, não faz nada
+        // Conta quantas peças ATIVAS ainda restam no lote
+        long pecasAtivas = pecaRepository.countByLoteIdAndStatus(lote.getId(), StatusPeca.ATIVO.name());
+        if (pecasAtivas == 0) {
+            lote.setStatus(StatusPeca.INATIVO.name());
+            lote.setDataFechamento(LocalDateTime.now());
+            loteRepository.save(lote);
+        }
+    }
 }

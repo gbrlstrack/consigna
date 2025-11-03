@@ -35,6 +35,7 @@ public class PecaService {
     private final SaidaRepository saidaRepository;
     private final UsuarioRepository usuarioRepository;
     private final Mapper mapper;
+    private final LoteService loteService;
 
     public PecaDTO getById(Long id) {
         var peca = pecaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Peça not found"));
@@ -88,6 +89,7 @@ public class PecaService {
 
             Peca updatedPeca = pecaRepository.save(pecaFromDb);
             pecasAtualizadas.add(ObjectMapper.parseObject(updatedPeca, PecaDTO.class));
+            loteService.verificarEAtualizarStatusLote(updatedPeca);
         }
 
         return pecasAtualizadas;
