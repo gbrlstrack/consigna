@@ -46,10 +46,11 @@ public class PecaService {
     @Transactional
     public Page<PecaDTO> getAll(String descricao, Pageable pageable) {
         Page<Peca> pecasPage;
+        String statusToExclude = StatusPeca.INATIVO.name();
         if (descricao != null && !descricao.trim().isEmpty()) {
-            pecasPage = pecaRepository.findByDescricaoContainingIgnoreCase(descricao, pageable);
+            pecasPage = pecaRepository.findByDescricaoContainingIgnoreCaseAndStatusNot(descricao, statusToExclude, pageable);
         } else {
-            pecasPage = pecaRepository.findAll(pageable);
+            pecasPage = pecaRepository.findAllByStatusNot(statusToExclude, pageable);
         }
         // Refatorado para usar o ObjectMapper, deixando o código mais limpo
         return pecasPage.map(peca -> parseObject(peca, PecaDTO.class));

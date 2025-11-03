@@ -73,7 +73,7 @@ public class LoteService {
                     peca.setDescricao(pecaDto.getDescricao());
                     peca.setQuantidade(pecaDto.getQuantidade());
                     peca.setValorMinimo(pecaDto.getValorMinimo());
-                    peca.setStatus(pecaDto.getStatus());
+                    peca.setStatus(StatusPeca.ATIVO.name());
                     peca.setValorDeVenda(pecaDto.getValorDeVenda());
                     peca.setValorDeRepasse(pecaDto.getValorDeRepasse());
                     peca.setDataAlteracaoStatus(pecaDto.getDataAlteracaoStatus());

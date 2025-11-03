@@ -8,4 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PecaRepository extends JpaRepository<Peca, Long> {
 
     Page<Peca> findByDescricaoContainingIgnoreCase(String descricao, Pageable pageable);
+
+    Page<Peca> findByDescricaoContainingIgnoreCaseAndStatusNot(String descricao, String status, Pageable pageable);
+
+    Page<Peca> findAllByStatusNot(String status, Pageable pageable);
 }
