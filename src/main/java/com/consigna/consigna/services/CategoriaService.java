@@ -25,8 +25,8 @@ public class CategoriaService {
         return parseObject(categoriaRepository.save(entity), CategoriaDTO.class);
     }
 
-    public CategoriaDTO getById(Long id) {
-        return parseObject(categoriaRepository.findById(id), CategoriaDTO.class);
+    public CategoriaDTO getById(CategoriaDTO categoria) {
+        return parseObject(categoriaRepository.findById(categoria.getId()), CategoriaDTO.class);
     }
 
     public Page<CategoriaDTO> getAll(Pageable pageable) {
@@ -42,8 +42,8 @@ public class CategoriaService {
         return parseObject(updated, CategoriaDTO.class);
     }
 
-    public void delete(Long id) {
-        var categoria = categoriaRepository.findById(id)
+    public void delete(CategoriaDTO dto) {
+        var categoria = categoriaRepository.findById(dto.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Categoria not found"));
         categoriaRepository.delete(categoria);
     }

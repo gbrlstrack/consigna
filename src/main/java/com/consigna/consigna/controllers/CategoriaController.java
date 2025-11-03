@@ -26,8 +26,8 @@ public class CategoriaController {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public CategoriaDTO getById(@PathVariable Long id) {
-        return categoriaService.getById(id);
+    public CategoriaDTO getById(@PathVariable CategoriaDTO categoria) {
+        return categoriaService.getById(categoria);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,8 +41,8 @@ public class CategoriaController {
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        categoriaService.delete(id);
+    public ResponseEntity<Void> delete(@PathVariable CategoriaDTO categoria) {
+        categoriaService.delete(categoria);
         return ResponseEntity.noContent().build();
     }
 }
