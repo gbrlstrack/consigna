@@ -29,7 +29,7 @@ public class SecuriyConfig {
         http.csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults()) // Habilita o CORS com a configuração do bean abaixo
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/usuario/esqueci-senha").permitAll() // Permite acesso aos endpoints de autenticação
+                        .requestMatchers("/auth/**", "/usuario/esqueci-senha", "/usuario/redefinir-senha").permitAll() // Permite acesso aos endpoints de autenticação
                         .anyRequest().authenticated() // Exige autenticação para todas as outras requisições
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // API stateless

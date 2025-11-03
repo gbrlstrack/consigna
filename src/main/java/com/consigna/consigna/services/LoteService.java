@@ -8,12 +8,12 @@ import com.consigna.consigna.repository.ConsignatarioRepository;
 import com.consigna.consigna.repository.LoteRepository;
 import com.consigna.consigna.repository.PecaRepository;
 import com.consigna.consigna.repository.UsuarioRepository;
-import com.github.dozermapper.core.Mapper;
+import com.consigna.consigna.specifications.LoteSpecification;
 import com.google.zxing.WriterException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -21,11 +21,13 @@ import com.consigna.consigna.exceptions.ResourceNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.consigna.consigna.mapper.ObjectMapper.parseObject;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +38,6 @@ public class LoteService {
     private final UsuarioRepository usuarioRepository;
     private final QRCodeService qrCodeService;
     private final PecaRepository pecaRepository;
-    private final Mapper mapper;
 
     @Transactional
     public LoteResponseDTO createLoteWithPecas(LoteRequestDTO loteDto) {
@@ -90,22 +91,23 @@ public class LoteService {
         loteEntity.setValorTotal(valorTotal);
         Lote savedLote = loteRepository.save(loteEntity);
 
-        return mapper.map(savedLote, LoteResponseDTO.class);
+        return parseObject(savedLote, LoteResponseDTO.class);
     }
 
     public LoteResponseDTO getById(Long id) {
         var lote = loteRepository.findByIdWithPecas(id).orElseThrow(() -> new ResourceNotFoundException("Lote not found"));
-        return mapper.map(lote, LoteResponseDTO.class);
+        return parseObject(lote, LoteResponseDTO.class);
     }
 
-    public Page<LoteResponseDTO> getAll(String nomeConsignatario, Pageable pageable) {
-        Page<Lote> lotesPage;
-        if (nomeConsignatario != null && !nomeConsignatario.trim().isEmpty()) {
-            lotesPage = loteRepository.findByConsignatarioNomeContainingIgnoreCase(nomeConsignatario, pageable);
-        } else {
-            lotesPage = loteRepository.findAllWithPecas(pageable);
-        }
-        return lotesPage.map(lote -> mapper.map(lote, LoteResponseDTO.class));
+    @Transactional
+    public Page<LoteResponseDTO> getAll(String nomeConsignatario, StatusPeca status, LocalDate dataEntradaInicio, LocalDate dataEntradaFim, LocalDate dataSaidaInicio, LocalDate dataSaidaFim, Pageable pageable) {
+        Specification<Lote> spec = Specification.where(LoteSpecification.comConsignatario(nomeConsignatario))
+                .and(LoteSpecification.comStatus(status))
+                .and(LoteSpecification.comDataEntradaEntre(dataEntradaInicio, dataEntradaFim))
+                .and(LoteSpecification.comDataSaidaEntre(dataSaidaInicio, dataSaidaFim));
+
+        Page<Lote> lotesPage = loteRepository.findAll(spec, pageable);
+        return lotesPage.map(lote -> parseObject(lote, LoteResponseDTO.class));
     }
 
     @Transactional
