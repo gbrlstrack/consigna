@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/pecas") // Sugestão: Usar plural para endpoints de coleção
+@RequestMapping("/peca") // Sugestão: Usar plural para endpoints de coleção
 public class PecaController {
 
     @Autowired

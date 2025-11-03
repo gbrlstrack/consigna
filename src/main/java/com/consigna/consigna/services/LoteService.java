@@ -64,6 +64,7 @@ public class LoteService {
         loteEntity.setDataEntrada(LocalDateTime.now());
         loteEntity.setConsignatario(consignatario);
         loteEntity.setUsuario(loggedUser);
+        loteEntity.setValorTotal(loteDto.getValorTotal());
 
         List<Peca> pecas = loteDto.getPecas().stream()
                 .map(pecaDto -> {
@@ -90,7 +91,9 @@ public class LoteService {
                 })
                 .collect(Collectors.toList());
 
+        Double valorTotal = pecas.stream().mapToDouble(peca -> peca.getValorDeVenda() * peca.getQuantidade()).sum();
         loteEntity.setPecas(pecas);
+        loteEntity.setValorTotal(valorTotal);
         Lote savedLote = loteRepository.save(loteEntity);
 
         return parseObject(savedLote, LoteResponseDTO.class);
