@@ -5,6 +5,7 @@ import com.consigna.consigna.dtos.PecaDTORequest;
 import com.consigna.consigna.dtos.PecaSaidaDTORequest;
 import com.consigna.consigna.enums.StatusPeca;
 import com.consigna.consigna.exceptions.ResourceNotFoundException;
+import com.consigna.consigna.mapper.ObjectMapper;
 import com.consigna.consigna.models.Peca;
 import com.consigna.consigna.models.Saida;
 import com.consigna.consigna.models.Usuario;
@@ -49,7 +50,7 @@ public class PecaService {
         } else {
             pecasPage = pecaRepository.findAllByStatusNot(statusToExclude, pageable);
         }
-        return pecasPage.map(peca -> mapper.map(peca, PecaDTO.class));
+        return pecasPage.map(peca -> ObjectMapper.parseObject(peca, PecaDTO.class));
     }
 
     @Transactional
