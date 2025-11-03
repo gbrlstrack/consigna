@@ -11,6 +11,7 @@ import com.consigna.consigna.models.Usuario;
 import com.consigna.consigna.repository.PecaRepository;
 import com.consigna.consigna.repository.SaidaRepository;
 import com.consigna.consigna.repository.UsuarioRepository;
+import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,29 +19,25 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.consigna.consigna.mapper.ObjectMapper.parseObject;
-
 @Service
+@RequiredArgsConstructor
 public class PecaService {
 
-    @Autowired
-    PecaRepository pecaRepository;
-
-    @Autowired
-    SaidaRepository saidaRepository;
-
-    @Autowired
-    UsuarioRepository usuarioRepository;
+    private final PecaRepository pecaRepository;
+    private final SaidaRepository saidaRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final Mapper mapper;
 
     public PecaDTO getById(Long id) {
         var peca = pecaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Peça not found"));
-        return parseObject(peca, PecaDTO.class);
+        return mapper.map(peca, PecaDTO.class);
     }
 
     @Transactional
@@ -52,8 +49,7 @@ public class PecaService {
         } else {
             pecasPage = pecaRepository.findAllByStatusNot(statusToExclude, pageable);
         }
-        // Refatorado para usar o ObjectMapper, deixando o código mais limpo
-        return pecasPage.map(peca -> parseObject(peca, PecaDTO.class));
+        return pecasPage.map(peca -> mapper.map(peca, PecaDTO.class));
     }
 
     @Transactional
@@ -89,7 +85,7 @@ public class PecaService {
             }
 
             Peca updatedPeca = pecaRepository.save(pecaFromDb);
-            pecasAtualizadas.add(parseObject(updatedPeca, PecaDTO.class));
+            pecasAtualizadas.add(mapper.map(updatedPeca, PecaDTO.class));
         }
 
         return pecasAtualizadas;
@@ -109,7 +105,7 @@ public class PecaService {
         peca.setDataAlteracaoStatus(LocalDateTime.now());
 
         var updated = pecaRepository.save(peca);
-        return parseObject(updated, PecaDTO.class);
+        return mapper.map(updated, PecaDTO.class);
     }
 
     public void delete(Long id) {

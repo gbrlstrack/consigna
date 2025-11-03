@@ -8,6 +8,7 @@ import com.consigna.consigna.repository.ConsignatarioRepository;
 import com.consigna.consigna.repository.LoteRepository;
 import com.consigna.consigna.repository.PecaRepository;
 import com.consigna.consigna.repository.UsuarioRepository;
+import com.github.dozermapper.core.Mapper;
 import com.google.zxing.WriterException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
-import static com.consigna.consigna.mapper.ObjectMapper.parseObjectsList;
-import static com.consigna.consigna.mapper.ObjectMapper.parseObject;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -33,16 +31,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LoteService {
 
-    @Autowired
-    LoteRepository loteRepository;
-    @Autowired
-    ConsignatarioRepository consignatarioRepository;
-    @Autowired
-    UsuarioRepository usuarioRepository;
-    @Autowired
-    QRCodeService qrCodeService;
-
-    private final PecaRepository pecaRepository; // para buscar peças depois
+    private final LoteRepository loteRepository;
+    private final ConsignatarioRepository consignatarioRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final QRCodeService qrCodeService;
+    private final PecaRepository pecaRepository;
+    private final Mapper mapper;
 
     @Transactional
     public LoteResponseDTO createLoteWithPecas(LoteRequestDTO loteDto) {
@@ -96,12 +90,12 @@ public class LoteService {
         loteEntity.setValorTotal(valorTotal);
         Lote savedLote = loteRepository.save(loteEntity);
 
-        return parseObject(savedLote, LoteResponseDTO.class);
+        return mapper.map(savedLote, LoteResponseDTO.class);
     }
 
     public LoteResponseDTO getById(Long id) {
         var lote = loteRepository.findByIdWithPecas(id).orElseThrow(() -> new ResourceNotFoundException("Lote not found"));
-        return parseObject(lote, LoteResponseDTO.class);
+        return mapper.map(lote, LoteResponseDTO.class);
     }
 
     public Page<LoteResponseDTO> getAll(String nomeConsignatario, Pageable pageable) {
@@ -111,7 +105,7 @@ public class LoteService {
         } else {
             lotesPage = loteRepository.findAllWithPecas(pageable);
         }
-        return lotesPage.map(lote -> parseObject(lote, LoteResponseDTO.class));
+        return lotesPage.map(lote -> mapper.map(lote, LoteResponseDTO.class));
     }
 
     @Transactional

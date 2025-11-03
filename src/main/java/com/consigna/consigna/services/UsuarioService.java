@@ -3,40 +3,37 @@ package com.consigna.consigna.services;
 import com.consigna.consigna.dtos.UsuarioDTO;
 import com.consigna.consigna.models.Usuario;
 import com.consigna.consigna.repository.UsuarioRepository;
+import com.github.dozermapper.core.Mapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
-import static com.consigna.consigna.mapper.ObjectMapper.parseObject;
-import static com.consigna.consigna.mapper.ObjectMapper.parseObjectsList;
-
 @Service
+@RequiredArgsConstructor
 public class UsuarioService {
 
-    @Autowired
-    UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final Mapper mapper;
 
     public UsuarioDTO create(UsuarioDTO usuario) {
         String encodedPassword = passwordEncoder.encode(usuario.getSenha());
-        var entity = parseObject(usuario, Usuario.class);
+        var entity = mapper.map(usuario, Usuario.class);
         entity.setSenha(encodedPassword);
-        return parseObject(usuarioRepository.save(entity), UsuarioDTO.class);
+        var savedEntity = usuarioRepository.save(entity);
+        return mapper.map(savedEntity, UsuarioDTO.class);
     }
 
     public UsuarioDTO getById(Long id) {
         var usuario = usuarioRepository.findById(id);
-        return parseObject(usuario, UsuarioDTO.class);
+        return mapper.map(usuario, UsuarioDTO.class);
     }
 
     public Page<UsuarioDTO> getAll(Pageable pageable) {
-        return usuarioRepository.findAll(pageable).map(user -> parseObject(user, UsuarioDTO.class));
+        return usuarioRepository.findAll(pageable).map(user -> mapper.map(user, UsuarioDTO.class));
     }
 
     public UsuarioDTO update(Long id, UsuarioDTO usuarioDTO) {
@@ -48,7 +45,8 @@ public class UsuarioService {
         if (usuarioDTO.getSenha() != null) usuario.setSenha(passwordEncoder.encode(usuarioDTO.getSenha()));
 
 
-        return parseObject(usuarioRepository.save(usuario), UsuarioDTO.class);
+        var updatedUser = usuarioRepository.save(usuario);
+        return mapper.map(updatedUser, UsuarioDTO.class);
     }
 
     public void delete(Long id) {
