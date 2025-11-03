@@ -86,7 +86,7 @@ public class PecaService {
             }
 
             Peca updatedPeca = pecaRepository.save(pecaFromDb);
-            pecasAtualizadas.add(mapper.map(updatedPeca, PecaDTO.class));
+            pecasAtualizadas.add(ObjectMapper.parseObject(updatedPeca, PecaDTO.class));
         }
 
         return pecasAtualizadas;
