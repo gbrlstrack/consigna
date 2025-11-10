@@ -3,9 +3,9 @@ spring:
     name: consigna
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}
-    username: ${PGUSER}
-    password: ${PGPASSWORD}
+    url: ${SPRING_DATASOURCE_HOST}
+#    username: ${PGUSER}
+#    password: ${PGPASSWORD}
   jpa:
     hibernate:
       ddl-auto: none
