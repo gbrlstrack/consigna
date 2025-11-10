@@ -31,6 +31,8 @@ logging:
   level:
     com.consigna.consigna: INFO
     org.hibernate.SQL: DEBUG
+    org.hibernate: DEBUG
+    com.zaxxer.hikari: DEBUG
 
 # Configurações para JSON Web Token (JWT)
 jwt:
