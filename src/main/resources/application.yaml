@@ -22,8 +22,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${EMAIL_USER}
-    password: ${EMAIL_PASSWORD}
+    username: consignauepg2025@gmail.com
+    password: '*Consigna25'
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
@@ -37,7 +37,8 @@ logging:
 # Configurações para JSON Web Token (JWT)
 jwt:
   # EM PRODUÇÃO, use uma variável de ambiente ou um cofre de segredos (Vault)
-  secret: ${JWT_SECRET}
+  secret: f4$S2jH_pZ9yLq7xM6bG_kT3vE8aC1dX
   expiration: 14400000
 server:
-  port: ${PORT}
+  port: 24593
+
