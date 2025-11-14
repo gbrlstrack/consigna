@@ -1,11 +1,11 @@
 spring:
   application:
-    name: consigna
+    name: anton6421_consigna
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/consigna
-    username: postgres
-    password: admin
+    username: anton6421_consigna123
+    password: consigna123
   jpa:
     hibernate:
       ddl-auto: none
