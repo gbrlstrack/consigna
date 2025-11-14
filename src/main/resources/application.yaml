@@ -11,7 +11,7 @@ spring:
       ddl-auto: none
     properties:
       hibernate:
-#        default_schema: consigna
+        #        default_schema: consigna
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
     open-in-view: false
@@ -22,18 +22,22 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: gbrlstrack@gmail.com
-    password: "cxrm msei snza elwc"
+    username: ${EMAIL_USER}
+    password: ${EMAIL_PASSWORD}
     properties:
-        mail.smtp.auth: true
-        mail.smtp.starttls.enable: true
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
 logging:
   level:
     com.consigna.consigna: INFO
     org.hibernate.SQL: DEBUG
+    org.hibernate: DEBUG
+    com.zaxxer.hikari: DEBUG
 
 # Configurações para JSON Web Token (JWT)
 jwt:
   # EM PRODUÇÃO, use uma variável de ambiente ou um cofre de segredos (Vault)
-  secret: "uma-chave-secreta-super-longa-e-segura-com-pelo-menos-256-bits-de-entropia"
+  secret: ${JWT_SECRET}
   expiration: 14400000
+server:
+  port: ${PORT}
